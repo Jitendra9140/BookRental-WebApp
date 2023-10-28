@@ -1,0 +1,153 @@
+.CartContainer{
+	width: 70%;
+	height: 90%;
+	background-color:white;
+    border-radius: 20px;
+}
+
+.Header{
+	margin: auto;
+	width: 90%;
+	height: 15%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.Heading{
+	font-size: 20px;
+	font-family:Georgia;
+	color:black;
+}
+
+.Action{
+	font-size: 14px;
+	font-family: Georgia;
+	font-weight: 600;
+	color: red;
+	border-bottom: 1px solid red;
+}
+
+.Cart-Items{
+	width: 100%;
+	/* height: 30%; */
+  display: flex;
+  justify-content: space-between;
+	align-items: center;
+}
+.image-box{
+	width: 15%;
+	text-align: center;
+}
+img{
+  height:120px
+}
+
+.title{
+    padding-top: 10px;
+	font-size: 20px;
+	font-family:Georgia;
+	font-weight: 80px;
+	/* color:black; */
+}
+.subtitle{
+	line-height: 0px;
+	font-size: 18px;
+	font-family:Georgia;
+	font-weight: 600;
+	
+}
+img{
+ height: 120px
+}
+
+.counter{
+	width: 15%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+  background-color:white;
+}
+.btn{
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 20px;
+	font-family: Arial;
+	font-weight: 900;
+	color: black;
+	cursor: pointer;
+}
+.count{
+	font-size: 15px;
+	font-family: Georgia;
+	font-weight: 600;
+	color: black;
+}
+
+.prices{
+	height: 100%;
+	text-align: right;
+}
+.amount{
+	padding: 20px;
+	font-size: 26px;
+	font-family: Georgia;
+	font-weight: 800;
+	color: black;
+}
+hr{
+	width: 66%;
+	float: right;
+	margin-right: 5%;
+}
+.checkout{
+	float: right;
+	margin-right: 5%;
+	width: 28%;
+}
+.total{
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+.Subtotal{
+	font-size: 22px;
+	font-family: 'Open Sans';
+	font-weight: 700;
+	color: #202020;
+     font-family:georgia;
+}
+.items{
+	font-size: 16px;
+	font-family: georgia;
+	font-weight: 500;
+	color: #909090;
+	line-height: 10px;
+}
+.total-amount{
+	font-size: 36px;
+	font-family: georgia;
+	font-weight: 900;
+	color: #202020;
+}
+.button{
+	margin-top: 10px;
+	width: 100%;
+	height: 40px;
+	border: none;
+	cursor: pointer;
+	font-size: 16px;
+	font-family: georgia;
+	font-weight: 400;
+	color: white;
+}
+.save {
+  font-family:georgia;
+}
+.remove {
+  font-family:georgia;
+}
