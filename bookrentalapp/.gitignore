@@ -4,12 +4,14 @@
 /node_modules
 /.pnp
 .pnp.js
+/src/pages/Datajson.json
 
 # testing
 /coverage
 
 # production
 /build
+
 
 # misc
 .DS_Store
