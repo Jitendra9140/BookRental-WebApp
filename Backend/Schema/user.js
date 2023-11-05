@@ -8,7 +8,7 @@ const userShema=mongoose.Schema({
     password:String,
     confirmpassword:String,
     profilePic:String,
-    age:Number,
+    year:Number,
     phonenumber:Number,
     cart:[
         {   id:{

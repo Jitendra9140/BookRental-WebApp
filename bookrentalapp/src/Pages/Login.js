@@ -1,23 +1,29 @@
 import React,{useState} from "react";
 import {useNavigate} from "react-router-dom"
-
 import {newuser} from "../Api/user"
 // import { ToastContainer,toast} from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
+import FormHelperText from '@mui/material/FormHelperText';
 import EmailIcon from '@mui/icons-material/Email';
 import KeyIcon from '@mui/icons-material/Key';
 import IconButton from "@mui/material/IconButton";
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import { Link } from "react-router-dom";
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Button, TextField, OutlinedInput } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
-import FormControl from "@mui/material/FormControl";
 import { Visibility,VisibilityOff}from "@mui/icons-material";
 import {PhotoAlbumOutlined} from "@mui/icons-material";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 export default function Login() {
   const [showPassword, setShowPassword] = React.useState(false);
-
+  const [phoneError, setPhoneError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const handleClickShowPassword = () => setShowPassword((show) => !show);
     const [user,setUser]=useState({
         fname:"",
@@ -27,25 +33,51 @@ export default function Login() {
         email:"",
         profilePic:"",
         phonenumber:"",
-        age:""
+        year:""
       })
       const navigate=useNavigate()
     
       const handleSubmit = async (event) => {
         console.log(user)
-        if(user.password===user.confirmpassword){
+        if (!user.email) {
+          toast.error('Please enter your email!', { position: toast.POSITION.TOP_RIGHT });
+        } else if (!user.password) {
+          toast.error('Please enter your password!', { position: toast.POSITION.TOP_RIGHT });
+        } 
+        else if (!user.fname) {
+          toast.error('Please enter your fname!', { position: toast.POSITION.TOP_RIGHT });
+        } 
+        else if (!user.lname) {
+          toast.error('Please enter your lname!', { position: toast.POSITION.TOP_RIGHT });
+        } 
+         
+        else if (!user.confirmpassword) {
+          toast.error('Please enter your confirm password!', { position: toast.POSITION.TOP_RIGHT });
+        } 
+        else if (!user.phonenumber) {
+          toast.error('Please enter your phonenumber!', { position: toast.POSITION.TOP_RIGHT });
+        } 
+         
+        else if (!user.year) {
+          toast.error('Please enter your year!', { position: toast.POSITION.TOP_RIGHT });
+        } 
+        else if (!user.profilePic) {
+          toast.error('Please enter your profilepic!', { position: toast.POSITION.TOP_RIGHT });
+        } 
+          else {
              const x=await newuser(user);
             //  console.log()
              const error="error"
              if(x.data.status===error){
+              toast.success("User is allredy exist");
               console.log("user is alredy exist")
              }
              else{
-               navigate("/");             
+              toast.success("Successfully Created account");
+              setTimeout(() => {
+                navigate("/");
+              }, 1500);            
              }
-        }
-        else{
-          console.log("password and r-password differ");
         }
     };
     
@@ -53,83 +85,203 @@ export default function Login() {
         setUser({...user,profilePic:e.target.files[0]})
       }
       
-      const handlechange=(e)=>{
-        console.log(e.target);
-           const {name,value}=e.target;
-          setUser({...user,[name]:value})
-      }
+
+      const handlechange= (e) => {
+        const { name, value } = e.target;
+        setUser({ ...user, [name]: value });
       
+        if (name === "phonenumber") {
+          if (!/^\d{0,10}$/.test(value)) {
+            setPhoneError("Phone number should be a maximum of 10 digits and contain only numbers.");
+          } else {
+            setPhoneError("");
+          }
+        }
+      
+        if (name === "email") {
+          if (!isValidEmail(value)) {
+            setEmailError("Invalid email address");
+          } else {
+            setEmailError("");
+          }
+        }
+      
+        if (name === "password") {
+          if (!isValidPassword(value)) {
+            setPasswordError("Password must contain at least one uppercase letter, one lowercase letter, and one special character");
+          } else {
+            setPasswordError("");
+          }
+        }
+
+        if (name === "confirmpassword") {
+          if (value !== user.password) {
+            setConfirmPasswordError("Passwords do not match");
+          } else {
+            setConfirmPasswordError("");
+          }
+        }
+      };
+      
+     
+
+      const isValidPassword = (password) => {
+        const uppercaseRegex = /[A-Z]/;
+        const lowercaseRegex = /[a-z]/;
+        const specialCharacterRegex = /[@$!%*?&#]/;
+      
+        return (
+          uppercaseRegex.test(password) &&
+          lowercaseRegex.test(password) &&
+          specialCharacterRegex.test(password)
+        );
+      };
+      
+      const isValidEmail = (email) => {
+        // Basic email format validation
+        const emailRegex = /\S+@\S+\.\S+/;
+        return emailRegex.test(email);
+      };
   return (
     <div className="">
-    <div className=" p-5  bg-white flex ">
-      <div className="md:w-1/4 bg-white p-5 flex flex-col mx-auto rounded my-6 shadow-md">
-        <div className="head text-3xl text-green-600  font-serif font-semibold mx-auto  text-shodow-md">
-          Registration
-        </div>
-        <form action="" className=" w-full my-2 flex flex-col gap-4 px-4">
-          <div className="flex md:flex-row flex-col gap-4">
-          <div className="flex flex-col gap-1 ">
-            <label htmlFor="" className=" text-sm text-black font-serif font-semibold ">First Name </label>
+      <div class="min-w-screen min-h-screen bg-white flex items-center justify-center px-5 py-5">
+    <div class="bg-white-100 text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden" style={{maxWidth:"1000px"}}>
+        <div class="md:flex w-full">
+            <div class="hidden md:block w-1/2 bg-red-600 ">
+                <img src="images/bookguy.png" className='w-full h-full object-fit:contain;' alt="" />
+            </div>
+            <div class="w-full md:w-1/2 py-10 px-5 flex flex-col justify-center md:px-10">
+                <div class="text-center mb-10">
+                    <h1 class="font-extrabold text-3xl text-red-900 text-4xl ">Create Your Account</h1>
+                </div>
+                <div>
+                <div className="flex md:flex-row flex-col gap-4">
+          <div className="flex flex-col gap-1 my-2">
+            <label htmlFor="" className=" text-sm text-red-800 text-xl font-serif font-semibold ">First Name </label>
             <TextField fullWidth label="Name" id="fullWidth" color="warning"  name="fname"  onChange={(e)=>{handlechange(e)}} />
           </div>
-          <div className="flex flex-col gap-1 ">
-            <label htmlFor="" className=" text-sm text-black font-serif font-semibold "> Last Name </label>
+          <div className="flex flex-col gap-1 my-2">
+            <label htmlFor="" className=" text-sm text-red-800 text-xl font-serif font-semibold "> Last Name </label>
             <TextField fullWidth label="Last name" id="fullWidth"  name="lname" variant="outlined" color="warning" onChange={(e)=>{handlechange(e)}} />
-      
           </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="" className=" text-sm text-black font-serif font-semibold ">Contact</label>
-            <TextField fullWidth label="Contact" id="fullWidth" name="phonenumber"  onChange={(e)=>{handlechange(e)}} color="warning" />
+          <div className="flex flex-col gap-2 my-2">
+            <label htmlFor="" className="  text-red-800 text-xl font-serif font-semibold ">Contact</label>
+            <TextField
+    fullWidth
+    label="Contact"
+    id="fullWidth"
+    name="phonenumber"
+    onChange={(e) => {
+      handlechange(e);
+    }}
+    color="warning"
+    error={phoneError !== ""}
+    helperText={phoneError}
+  />
           </div>
-          <div className="flex flex-col gap-2">
-            <label  htmlFor=""  className=" text-sm text-black font-serif font-semibold ">
+          <div className="flex flex-col gap-2 my-2">
+            <label  htmlFor=""  className="text-red-800 text-xl font-serif font-semibold ">
               Email Address</label>
-            <TextField fullWidth label="Email Address" id="fullWidth" color="warning" name="email"  onChange={(e)=>{handlechange(e)}} />
+              <TextField
+  fullWidth
+  label="Email Address"
+  id="fullWidth"
+  color="warning"
+  name="email"
+  onChange={(e) => {
+    handlechange(e);
+  }}
+  error={emailError !== ""}
+  helperText={emailError}
+/>
           </div>
           
-          <div className="flex flex-col gap-2">
-            <label  htmlFor=""  className=" text-sm text-black font-serif font-semibold "> Password</label>
+          <div className="flex flex-col gap-2 my-2">
+            <label  htmlFor=""  className=" text-red-800 text-xl font-serif font-semibold "> Password</label>
             <FormControl fullWidth sx={{ my: 0 }} variant="outlined" color="warning">
-        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-        <OutlinedInput 
-          id="outlined-adornment-password"
-          name="password"  onChange={(e)=>{handlechange(e)}}
-          type={showPassword ? 'text' : 'password'}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                // onMouseDown={handleMouseDownPassword}
-                edge="end"
-              >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
-          label="Password" />
-      </FormControl>             
+  <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+  <OutlinedInput
+    id="outlined-adornment-password"
+    name="password"
+    onChange={(e) => { handlechange(e) }}
+    type={showPassword ? 'text' : 'password'}
+    error={passwordError !== ""}
+    label="Password"
+    endAdornment={
+      <InputAdornment position="end">
+        <IconButton
+          aria-label="toggle password visibility"
+          onClick={handleClickShowPassword}
+          edge="end"
+        >
+          {showPassword ? <VisibilityOff /> : <Visibility />}
+        </IconButton>
+      </InputAdornment>
+    }
+  />
+  {passwordError && (
+    <FormHelperText error>{passwordError}</FormHelperText>
+  )}
+</FormControl> 
         </div>
-        <div className="flex flex-col gap-2">
-            <label  htmlFor=""  className=" text-sm text-black font-serif font-semibold ">
+        <div className="flex flex-col gap-2 my-2">
+            <label  htmlFor=""  className=" text-red-800 text-xl font-serif font-semibold ">
               Confirm Password</label>
-            <TextField fullWidth label=" Confirm Password" id="fullWidth" color="warning" name="confirmpassword" placeholder="Confirm password" onChange={(e)=>{handlechange(e)}} />
+              <TextField
+  fullWidth
+  label="Confirm Password"
+  id="fullWidth"
+  color="warning"
+  name="confirmpassword" // Make sure the name is "confirmpassword"
+  placeholder="Confirm password"
+  onChange={(e) => { handlechange(e) }} // Use the same handlechange function
+  error={confirmPasswordError !== ""} // Display error if passwordError is not empty
+  helperText={confirmPasswordError} // Show the error message
+/>
           </div>
-         <div className="w-full flex flex-row gap-4">
-          <Button variant="outlined" component="label" sx={{ width:'50%',height:'60px'}}>upload<input hidden accept="image/*" multiple type="file"  name="profilePic"  onChange={(e)=>{imgUplode(e)}} /> <PhotoAlbumOutlined/></Button>
-            <div  className="">
+         <div className="w-full flex flex-row gap-4 my-5">
+          
+          <Button variant="outlined" color="error"  component="label" fullWidth>upload<input hidden accept="image/*" multiple type="file"  name="profilePic"  onChange={(e)=>{imgUplode(e)}} /> <PhotoAlbumOutlined/></Button>
+            <div  className=" w-full">
            
-            <TextField fullWidth label="Age" id="fullWidth" name="age" placeholder="DD/MM/YYYY"   onChange={(e)=>{handlechange(e)}} color="warning" />
+            <FormControl fullWidth>
+  <InputLabel id="demo-simple-select-label">Year</InputLabel>
+  <Select
+ 
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    value={user.year}
+    label="Year"
+    name="year"
+    onChange={handlechange}
+  >
+    <MenuItem value={1}>First Year</MenuItem>
+    <MenuItem value={2}>Second Year</MenuItem>
+    <MenuItem value={3}>Third Year</MenuItem>
+    <MenuItem value={4}>Fourth Year</MenuItem>
+  </Select>
+</FormControl>
             </div>
           </div>
-        <div>
-        <Button variant="contained" color="warning" fullWidth sx={{height:'60px'}} onClick={()=>{handleSubmit()}}> Register</Button>
-        </div>  
-        </form>
-      </div>
+                    <div class="flex -mx-3">
+                        <div class="w-full px-3 mb-12">
+                            <div class="flex ">
+                                <div className=" text-black text-lg font-serif font-bold ">All ready have account ?  <span className='text-red-800'><Link to="/" className='text-red-800 text-md'>Login ! </Link></span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex -mx-3">
+                        <div class="w-full px-3 mb-5">
+                            <button class="block  px-5 max-w-xs mx-auto bg-white border border-3 text-2xl  font-serif border-red-600 text-red-800 rounded-lg px-3 py-3 font-bold"  onClick={()=>{handleSubmit()}}>Sign up</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <ToastContainer/>
+     <ToastContainer />
+</div>
   </div>
 
   );

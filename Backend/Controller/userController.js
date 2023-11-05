@@ -4,8 +4,10 @@ const bcrypt=require("bcrypt")
 const jwt=require("jsonwebtoken")
 const adduser = async (req, res) => {
   const profilePic = req.file ? req.file.path : null;
-  const { fname, lname, password, email,confirmpassword,age,phonenumber } = req.body;
+
+  const { fname, lname, password, email,confirmpassword,year,phonenumber } = req.body;
   console.log(confirmpassword);
+  console.log(year)
   const userexist= await User.findOne({email:email})
   try {
     if(userexist){
@@ -14,11 +16,12 @@ const adduser = async (req, res) => {
         status:"error",
         data:"user is alredy exist "
       });
+
      return json;
     }
     else{
        const haspassword= await bcrypt.hash(password,10)
-       const newUser = new User({ fname, lname, password:haspassword, email, profilePic,age,phonenumber,  cart: [],});
+       const newUser = new User({ fname, lname, password:haspassword, email, profilePic,year,phonenumber,  cart: [],});
       await newUser.save();
       console.log("user is added in db");
       res.status(200).json(newUser.name);

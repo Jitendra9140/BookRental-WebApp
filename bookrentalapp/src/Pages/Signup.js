@@ -70,62 +70,6 @@ export default function Signup() {
         }
       };
   return (
-    // <div className=' h-screen'>
-    //   <div className='w-[60%] flex  flex-row m-auto   justify-center	items-center h-[80%] rounded-2xl overflow-hidden shadow'>
-    //     <div className='w-2/5 h-full'>
-    //       <div className='bg-red-600'>
-    //       <img src="images/bookguy.png" className='w-full h-full object-fit:contain; overflow-hidden ' alt="" />
-    //       </div>
-    //     </div>
-    //     <div className="w-3/5 bg-white flex flex-col mx-auto  ">
-        
-    //     <form action="" className=" w-full my-2 flex flex-col gap-4">
-    //       <div className="flex flex-col gap-2">
-    //         <label  htmlFor=""  className=" text-sm text-black font-serif font-semibold ">
-    //           Email Address</label>
-    //         <TextField fullWidth label="Email Address" id="fullWidth" color="warning" name="email"  onChange={(e)=>{handlechange(e)}} />
-    //       </div>
-    //       <div className="flex flex-col gap-2">
-    //         <label  htmlFor=""  className=" text-sm text-black font-serif font-semibold "> Password</label>
-    //         <FormControl fullWidth sx={{ my: 0 }} variant="outlined" color="warning">
-    //     <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-    //     <OutlinedInput 
-    //       id="outlined-adornment-password"
-    //       name="password"  onChange={(e)=>{handlechange(e)}}
-    //       type={showPassword ? 'text' : 'password'}
-    //       endAdornment={
-    //         <InputAdornment position="end">
-    //           <IconButton
-    //             aria-label="toggle password visibility"
-    //             onClick={handleClickShowPassword}
-    //             // onMouseDown={handleMouseDownPassword}
-    //             edge="end"
-    //           >
-    //             {showPassword ? <VisibilityOff /> : <Visibility />}
-    //           </IconButton>
-    //         </InputAdornment>
-    //       }
-    //       label="Password" />
-    //   </FormControl> 
-    //        <div>
-    //         <Link to="/reset-password">
-    //        <label  htmlFor=""  className=" text-m  text-black font-serif font-semibold ">Forget Password ?</label>
-    //        </Link>
-    //       </div>       
-    //     </div>
-    //     <div>
-    //     <Button variant="contained" color="warning" fullWidth sx={{height:'60px'}} onClick={()=>{handleSubmit()}}> Register</Button>
-    //     </div>   
-    //     </form>
-    //     <div className="head text-xl text-green-600 my-[20px] font-serif font-semibold mx-auto  text-shodow-md">
-    //       Don't Have Account ? <span ><Link to="/login"><a href="" className='text-xl text-yellow-600  font-serif font-semibold  text-shodow-md'>signup here</a></Link></span>
-    //     </div>
-    //   </div>
-    //   </div>
-       
-  
-    // <ToastContainer />
-    // </div>
 <div class="min-w-screen min-h-screen bg-white flex items-center justify-center px-5 py-5">
     <div class="bg-white-100 text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden" style={{maxWidth:"1000px"}}>
         <div class="md:flex w-full">

@@ -143,8 +143,8 @@ useEffect(() => {
               <img class="object-cover object-center h-32" src={`http://localhost:8000/${user.profilePic}`} alt='Woman looking front'/>
             </div>
             <div class="text-center mt-2">
-              <h2 class="font-semibold">Anand yadav</h2>
-              <p class="text-gray-500">yadavjayup@gmail.com</p>
+              <h2 class="font-semibold">{user.fname}</h2>
+              <p class="text-gray-500">{user.email}</p>
             </div>
           </div> 
     </div>

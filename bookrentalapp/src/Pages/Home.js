@@ -3,14 +3,19 @@ import "../Style/Home.css";
 import Carousel from "react-elastic-carousel";
 import { getContent } from "../Api/book";
 import Star from "@mui/icons-material/Star";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams,useNavigate } from "react-router-dom";
 import { findUserByID } from "../Api/user";
+import { useDispatch } from 'react-redux'
+import { addToCart } from '../Redux/Action/cartSlice'
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Navbar from "./Navbar";
 import Footter from "./Footter";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Home() {
   const carouselRef = useRef(null);
+  const navigate=useNavigate()
   let resetTimeout= null;
   const [book, setbook] = useState([
     {
@@ -46,7 +51,17 @@ export default function Home() {
   useEffect(() => {
     AOS.init();
   }, []);
- 
+  const dispatch=useDispatch();
+  const id=window.localStorage.getItem("Id")
+const addInCart=(e)=>{
+ dispatch(addToCart(e))
+ toast.success("Successfully add to cart" );
+ setTimeout(() => {
+  navigate("/cart/" + id);
+
+}, 1000);
+}
+   
   return (
     <div>
       <div className="">
@@ -193,7 +208,7 @@ export default function Home() {
                      <span className="text-black font-bold">Price: </span> ⟨₹⟩ {data.price}
                     </div>
                    <div>
-                     <button className="bg-white w-[80px] border border-red-600 hover:bg-[#FC2947] hover:text-white rounded-[20px] mt-7 text-xl font-serif font-bold text-red-600 py-2 mr-[2px]">Rent</button>
+                     <button className="bg-white w-[80px] border border-red-600 hover:bg-[#FC2947] hover:text-white rounded-[20px] mt-7 text-xl font-serif font-bold text-red-600 py-2 mr-[2px]" onClick={()=>{ addInCart(data)}}>Rent</button>
                    </div>
                  </div>
                </div>
@@ -218,7 +233,7 @@ export default function Home() {
                      <span className="text-black texxt-xl font-bold">Price: </span> ⟨₹⟩ {data.price}
                     </div>
                   <div>
-                    <button className="bg-white w-[80px] border border-red-600 hover:bg-[#FC2947] hover:text-white rounded-[20px] mt-7 text-xl font-serif font-bold text-red-600 py-2 mr-[2px]">Rent</button>
+                    <button className="bg-white w-[80px] border border-red-600 hover:bg-[#FC2947] hover:text-white rounded-[20px] mt-7 text-xl font-serif font-bold text-red-600 py-2 mr-[2px]" onClick={()=>{ addInCart(data)}}>Rent</button>
                   </div>
                 </div>
               </div>
@@ -250,7 +265,7 @@ export default function Home() {
                      <span className="text-black  font-bold">Price: </span> ⟨₹⟩ {data.price}
                     </div>
                    <div>
-                     <button className="bg-white w-[80px] border border-red-600 hover:bg-[#FC2947] hover:text-white rounded-[20px] mt-7 text-xl font-serif font-bold text-red-600 py-2 mr-[2px]">Rent</button>
+                     <button className="bg-white w-[80px] border border-red-600 hover:bg-[#FC2947] hover:text-white rounded-[20px] mt-7 text-xl font-serif font-bold text-red-600 py-2 mr-[2px]" onClick={()=>{ addInCart(data)}}>Rent</button>
                    </div>
                  </div>
                </div>
@@ -281,7 +296,7 @@ export default function Home() {
                      <span className="text-black font-bold">Price: </span> ⟨₹⟩ {data.price}
                     </div>
                    <div>
-                     <button className="bg-white w-[80px] border border-red-600 hover:bg-[#FC2947] hover:text-white rounded-[20px] mt-7 text-xl font-serif font-bold text-red-600 py-2 mr-[2px]">Rent</button>
+                     <button className="bg-white w-[80px] border border-red-600 hover:bg-[#FC2947] hover:text-white rounded-[20px] mt-7 text-xl font-serif font-bold text-red-600 py-2 mr-[2px]" onClick={()=>{ addInCart(data)}}>Rent</button>
                    </div>
                  </div>
                </div>
@@ -317,104 +332,6 @@ export default function Home() {
             <img src="images/logo2.png" className="h-80" alt="" />
           </div>
         </div>
-
-        {/* <div className="">
-          <section className="bg-white">
-            <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-              <h2 class="text-center text-4xl text-red-500 font-extrabold tracking-tight sm:text-5xl">
-                Testimonial
-              </h2>
-              <div class="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
-                <blockquote class="rounded-lg bg-white   border-red-300 border-2 p-8">
-                  <div class="flex items-center gap-4">
-                    <img
-                      alt="Man"
-                      src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80"
-                      class="h-16 w-16 rounded-full object-cover"
-                    />
-
-                    <div>
-                      <div class="flex justify-center gap-0.5 text-green-500">
-                        <Star />
-                        <Star />
-                        <Star />
-                        <Star />
-                        <Star />
-                      </div>
-
-                      <p class="mt-1 text-lg font-medium text-gray-700">
-                        Paul Starr
-                      </p>
-                    </div>
-                  </div>
-
-                  <p class="line-clamp-2 sm:line-clamp-none mt-4 text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Deserunt voluptatem alias ut provident sapiente repellendus.
-                  </p>
-                </blockquote>
-
-                <blockquote class="rounded-lg bg-white border-red-300 border-2 p-8">
-                  <div class="flex items-center gap-4">
-                    <img
-                      alt="Man"
-                      src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80"
-                      class="h-16 w-16 rounded-full object-cover"
-                    />
-
-                    <div>
-                      <div class="flex justify-center gap-0.5 text-green-500">
-                        <Star />
-                        <Star />
-                        <Star />
-                        <Star />
-                        <Star />
-                      </div>
-
-                      <p class="mt-1 text-lg font-medium text-gray-700">
-                        Paul Starr
-                      </p>
-                    </div>
-                  </div>
-
-                  <p class="line-clamp-2 sm:line-clamp-none mt-4 text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Deserunt voluptatem alias ut provident sapiente repellendus.
-                  </p>
-                </blockquote>
-
-                <blockquote class="rounded-lg bg-white border-2 border-red-300 p-8">
-                  <div class="flex items-center gap-4">
-                    <img
-                      alt="Man"
-                      src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80"
-                      class="h-16 w-16 rounded-full object-cover"
-                    />
-
-                    <div>
-                      <div class="flex justify-center gap-0.5 text-green-500">
-                        <Star />
-                        <Star />
-                        <Star />
-                        <Star />
-                        <Star />
-                      </div>
-
-                      <p class="mt-1 text-lg font-medium text-gray-700">
-                        Paul Starr
-                      </p>
-                    </div>
-                  </div>
-
-                  <p class="line-clamp-2 sm:line-clamp-none mt-4 text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Deserunt voluptatem alias ut provident sapiente repellendus.
-                  </p>
-                </blockquote>
-              </div>
-            </div>
-          </section>
-        </div> */}
       </div>
       <div className="  p-5">
         <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
@@ -465,6 +382,7 @@ export default function Home() {
         </div>
       </div>
       <Footter/>
+      <ToastContainer/>
     </div>
   );
 }

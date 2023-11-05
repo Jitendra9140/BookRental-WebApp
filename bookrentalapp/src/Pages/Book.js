@@ -129,9 +129,6 @@ export default function Book() {
                   <div class="product-title">
                    {book.author}
                   </div>
-                  <div class="product-price" price-data={book.price}>
-                    ${book.price}<span class="product-price-cents">03</span>
-                  </div>
                 </div>
                 <div class="product-image">
                   <img src={`${book.image}`} />
@@ -142,18 +139,30 @@ export default function Book() {
                   {book.description}
                 </div>
                 <div class="product-available">
-                  In stock. <span class="product-extended"><a href="#">Buy Extended Warranty</a></span>
+                 Publication :<span class="product-extended">{book.publisher}</span>
                 </div>
-                <div class="product-rating">
-                  <i class="fa fa-star rating" star-data="1"></i>
-                  <i class="fa fa-star rating" star-data="2"></i>
-                  <i class="fa fa-star rating" star-data="3"></i>
-                  <i class="fa fa-star" star-data="4"></i>
-                  <i class="fa fa-star" star-data="5"></i>
-                  <div class="product-rating-details">(3.1 - <span class="rating-count">1203</span> reviews)
-                  </div>
-  
+                <div class="product-available">
+                 pages: <span class="product-extended">{book.pages}</span>
                 </div>
+                <div class="product-available">
+                 language: <span class="product-extended">{book.language}</span>
+                </div>
+                <div class="product-available">
+                 Year: <span class="product-extended">{book.year}</span>
+                </div>
+                <div class="product-available">
+                 Semester:<span class="product-extended">{book.semester}</span>
+                </div>
+                <div class="product-available">
+                 Original price:<span class="product-extended">⟨₹⟩{book.price}</span>
+                </div>
+                <div class="product-available">
+                 Discounted price:<span class="product-extended">⟨₹⟩{Math.floor(book.price*75/100)}</span>
+                </div>
+                <div class="product-available">
+                 After Return price:<span class="product-extended">⟨₹⟩{Math.floor(book.price*50/100)}</span>
+                </div>
+                
                 <div class="product-quantity">
                   <label for="product-quantity-input" class="product-quantity-label">Quantity</label>
                   <div class="product-quantity-subtract" onClick={ subtractQuantity}>
@@ -174,7 +183,7 @@ export default function Book() {
                   Total Price
                   <div class="product-checkout-total">
                     <i class="fa fa-usd"></i>
-                    <div class="product-checkout-total-amount">
+                    <div class="product-checkout-total-amount px-6">
                       {book.price}
                     </div>
                   </div>

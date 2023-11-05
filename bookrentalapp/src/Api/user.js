@@ -9,7 +9,7 @@ export const newuser= async(data)=>{
     formdata.append('password',data.password)
     formdata.append('confirmpassword',data.confirmpassword)
     formdata.append('email',data.email)
-    formdata.append('age',data.age)
+    formdata.append('year',data.year)
     formdata.append('phonenumber',data.phonenumber)
     console.log(formdata);
     try{
