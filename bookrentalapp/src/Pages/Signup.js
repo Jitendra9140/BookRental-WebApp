@@ -3,27 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { findUser } from '../Api/user';
 import EmailIcon from '@mui/icons-material/Email';
 import KeyIcon from '@mui/icons-material/Key';
-import IconButton from "@mui/material/IconButton";
 import Checkbox from '@mui/material/Checkbox';
-import { Button, TextField, OutlinedInput } from "@mui/material";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import FormControl from "@mui/material/FormControl";
-import { Visibility,VisibilityOff}from "@mui/icons-material";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from "react-router-dom";
-import {signInWithPopup} from "firebase/auth"
 import { DataContext } from './Resetconteexr';
+import loginimage from "../images/bookguy.png"
 export default function Signup() {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  
     const [user, setUser] = useState({
         email: "",
         password: "",
         name:""
       });  
-      const {userd ,setuserd} =useContext(DataContext);  
+      const {userd} =useContext(DataContext);  
       const navigate = useNavigate();
       const handlechange = (e)=>{
            const {name,value}=e.target;
@@ -74,7 +67,7 @@ export default function Signup() {
     <div class="bg-white-100 text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden" style={{maxWidth:"1000px"}}>
         <div class="md:flex w-full">
             <div class="hidden md:block w-1/2 bg-red-600 ">
-                <img src="images/bookguy.png" className='w-full h-full object-fit:contain;' alt="" />
+                <img src={loginimage} className='w-full h-full object-fit:contain;' alt="" />
             </div>
             <div class="w-full md:w-1/2 py-10 px-5 flex flex-col justify-center md:px-10">
                 <div class="text-center mb-10">

@@ -47,7 +47,6 @@ export default function Resetpass() {
         <Button variant="contained" color="warning" fullWidth sx={{height:'60px'}} onClick={()=>{handleSubmit()}}> Register</Button>
         </div>   
         <div>
-        <Link to="/otpvarify">Otp</Link>
         </div>   
         </form>
       </div>

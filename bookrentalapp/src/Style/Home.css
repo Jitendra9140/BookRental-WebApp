@@ -41,21 +41,7 @@ color: #abb2bf;
 .p-land{
     padding: 40px 0px;
 }
-.ball {
-    position: absolute;
-    top: 150px;
-    right: 260px;
-    display: block;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    box-shadow: inset -25px -25px 40px rgba(0,0,0,.5);
-    background-color: #3b4ba3;
-    background-image: -webkit-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
-    background-image: -moz-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);  
-    background-image: -o-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
-    background-image: -ms-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
-  }
+
 .bg-down{
     
     background: rgb(53,65,73);
@@ -71,6 +57,9 @@ body{
     background: white;
 
 }
+.gencontainer{
+    z-index: -100;
+}
 .generas .rec.rec-arrow button svg {
     width: 10px !important;
     height: 10px !important;
@@ -79,6 +68,7 @@ body{
     width: 10px !important;
     height: 10px !important;
 }
+
 .book1 .rec.rec-pagination {
     visibility: hidden;
 }

@@ -61,7 +61,7 @@ export default function Return() {
   }, [books]);
   return (
     <div>
-      <div className="sticky absolute top-0 left-0 z-20 shadow-md">
+      <div className="sticky  top-0 left-0 z-20 shadow-md">
         <Navbar/>
         </div>
         
@@ -140,3 +140,8 @@ onClick={deletebook}
    
   )
 }
+
+
+
+
+

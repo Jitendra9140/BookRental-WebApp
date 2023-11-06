@@ -1,22 +1,19 @@
 import React,{useState} from "react";
 import {useNavigate} from "react-router-dom"
 import {newuser} from "../Api/user"
-// import { ToastContainer,toast} from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
 import FormHelperText from '@mui/material/FormHelperText';
-import EmailIcon from '@mui/icons-material/Email';
-import KeyIcon from '@mui/icons-material/Key';
 import IconButton from "@mui/material/IconButton";
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { Link } from "react-router-dom";
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import { Button, TextField, OutlinedInput } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import { Visibility,VisibilityOff}from "@mui/icons-material";
 import {PhotoAlbumOutlined} from "@mui/icons-material";
 import { ToastContainer, toast } from 'react-toastify';
+import signinimage from '../images/bookguy.png'
 import 'react-toastify/dist/ReactToastify.css';
 export default function Login() {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -148,7 +145,7 @@ export default function Login() {
     <div class="bg-white-100 text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden" style={{maxWidth:"1000px"}}>
         <div class="md:flex w-full">
             <div class="hidden md:block w-1/2 bg-red-600 ">
-                <img src="images/bookguy.png" className='w-full h-full object-fit:contain;' alt="" />
+                <img src={signinimage} className='w-full h-full object-fit:contain;' alt="" />
             </div>
             <div class="w-full md:w-1/2 py-10 px-5 flex flex-col justify-center md:px-10">
                 <div class="text-center mb-10">

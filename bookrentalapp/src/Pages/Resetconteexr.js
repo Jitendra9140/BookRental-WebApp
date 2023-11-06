@@ -1,5 +1,4 @@
 import React, { createContext, useContext,useState } from "react";
-
 export const DataContext = createContext();
 const DataContextProvider = (props) => {
   const [email, setEmail] = useState();
