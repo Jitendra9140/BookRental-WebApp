@@ -26,10 +26,10 @@ export const cart= async(data,id)=>{
     console.log(data)
     try{
          await axios.post(`${url}/add/cart`,{data:data,id:id})
-         console.log("useris added by api")
+         console.log("book is added in cart ")
     }
     catch(err){
-          console.log("error is occur in adding user by api")
+          console.log("error is occur in adding the book in cart")
     }
 }
 
@@ -52,7 +52,7 @@ export const updatepass= async(data)=>{
           console.log("Error during updating password") 
     }
 }
-export const varifyuser = async (token) => {
+export const verifyUser = async (token) => {
   try {
     const response = await axios.get(`${url}/varifyuser`, {
       headers: {
@@ -82,10 +82,10 @@ export const findinCart= async({userId,bookid})=>{
           console.log("error is occur in finding user by api")
     }
 }
-export const deletcartbook= async({userId,bookIdsToDelete})=>{
+export const deletcartbook= async({userId,bookIdsToDelete,books})=>{
     try{ 
-       console.log(userId)
-        return await axios.post(`${url}/deletebook`,{userId,bookIdsToDelete})
+       console.log(books)
+        return await axios.post(`${url}/deletebook`,{userId,bookIdsToDelete,books})
     }
     catch(err){
           console.log("error is occur in finding user by api")

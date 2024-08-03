@@ -10,7 +10,8 @@ const bookShema=mongoose.Schema({
       language:String,
       description:String,
       price:Number,
+      quantity:Number,
       image:String
 })
-autoincrement.initialize(connection)
+// autoincrement.initialize(connection)
 module.exports =mongoose.model("book",bookShema);

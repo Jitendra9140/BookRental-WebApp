@@ -67,21 +67,25 @@ const varifyuser= async(req,res)=>{
         res.status(401).json({status:401,error})
        } 
  }
-const findUserByID = async (req, res) => {
-  console.log(req.body.id);
-  User.findOne({ _id: req.body.id }, (err, result) => {
-    if (!err) {
-      if (!result) {
-        console.log("user not found in db");
-        res.status(200).json(result);
-      } else {
-        res.status(200).json(result);
-        console.log("user found in by its id db");
-      }
-    } else {
-      console.log("err ocuur during findinBy Id user " + err);
+ const findUserByID = async (req, res) => {
+  try {
+    // console.log(req.body.id);
+    
+    // Await the result of findOne
+    const result = await User.findOne({ _id: req.body.id });
+    
+    // Check if result is null or not
+    if (!result) {
+      console.log("User not found in the database");
+      return res.status(404).json({ message: "User not found" });
     }
-  });
+    
+    // console.log("User found by its ID in the database");
+    return res.status(200).json(result);
+  } catch (err) {
+    console.error("Error occurred during findById user:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 const updatepassword=async(req,res)=>{
@@ -124,18 +128,14 @@ const addbook = async (req, res) => {
 
 
 const getbook = async (req, res) => {
-  console.log("i am here");
+  // console.log("I am here");
   try {
-    await Book.find({},(err, result) => {
-      if (!err) {
-        res.status(200).json(result);
-        console.log("Succecfully finding the data");
-      } else {
-        console.log("error is occor finding the data" + err);
-      }
-    });
+    const result = await Book.find({});
+    res.status(200).json(result);
+    // console.log("Successfully found the data");
   } catch (error) {
-    console.log("error is occor finding the data" + error);
+    console.log("Error occurred while finding the data: " + error);
+    res.status(500).json({ message: "An error occurred while fetching the books." });
   }
 };
 const getbookid = async (req, res) => {
@@ -155,8 +155,28 @@ const getbookid = async (req, res) => {
     }
   });
 };
+const getBookById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(`Fetching book with ID: ${id}`);
+
+    // Use findById instead of findOne for better readability
+    const book = await Book.findById(id);
+
+    if (!book) {
+      console.log("Book not found in the database");
+      return res.status(404).json({ message: "Book not found" });
+    }
+
+    console.log("Book found by its ID in the database");
+    res.status(200).json(book);
+  } catch (error) {
+    console.error("Error occurred while finding the book by ID:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 const getdata = async (req, res) => {
-  console.log("i am here");
+  // console.log("i am here");
   try {
     await Book.find({}, (err, result) => {
       if (!err) {
@@ -170,32 +190,115 @@ const getdata = async (req, res) => {
     console.log("error is occor finding the data" + error);
   }
 };
-const addcart = async (req, res) => {
-  const cartItems  = req.body.data;
-  const id = req.body.id;
-  console.log(cartItems)
+const updateUserCart = async (userId, cartItems) => {
   try {
+    // Update the user's cart
     const updatedUser = await User.findOneAndUpdate(
-      { _id: id },
+      { _id: userId },
       {
-       
-          $push: { cart: { $each: cartItems } },
-       
+        $push: { cart: { $each: cartItems } },
       },
       { new: true }
     );
 
     if (!updatedUser) {
+      console.warn("User not found");
+      return null;
+    }
+
+    console.log("User cart updated successfully");
+    return updatedUser;
+  } catch (error) {
+    console.error("Error occurred while updating user cart:", error);
+    throw error;
+  }
+};
+
+
+const addcart = async (req, res) => {
+  const cartItems = req.body.data;
+  const userId = req.body.id;
+  console.log(cartItems);
+  console.log("Jitendra");
+  
+  try {
+    // Update the user's cart
+    const updatedUser = await updateUserCart(userId, cartItems);
+    
+    if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    console.log("User updated successfully:", updatedUser);
+    // Subtract quantity from each book in the book schema
+    await updateBookQuantities(cartItems);
+    
     res.status(200).json(updatedUser);
   } catch (error) {
-    console.error("Error occurred while updating user:", error);
+    console.error("Error occurred while updating user or books:", error);
     res.status(500).json({ message: "Internal server error" });
   }
+}
+
+const updateBookQuantities = async (cartItems) => {
+  try {
+    const updatePromises = cartItems.map(async (item) => {
+      const bookId = item.id; // Assuming `id` is used as the book's unique identifier
+      const quantityToSubtract = item.quantity; // Quantity to subtract
+      console.log(`Updating book ${bookId}, subtracting quantity: ${quantityToSubtract}`);
+
+      // Find the book first to get its original quantity
+      const book = await Book.findById(bookId);
+
+      if (!book) {
+        console.warn(`Book with ID ${bookId} not found.`);
+        return null;
+      }
+
+      const originalQuantity = book.quantity; // Get the original quantity
+      console.log(`Original quantity of book ${bookId}: ${originalQuantity}`);
+
+      // Ensure there is enough stock before subtracting
+      if (originalQuantity < quantityToSubtract) {
+        console.warn(`Not enough stock for book ${bookId}.`);
+        return null;
+      }
+
+      // Update the book's quantity
+      const updatedBook = await Book.findOneAndUpdate(
+        { _id: bookId },
+        {
+          $set: {
+            quantity: originalQuantity - quantityToSubtract,
+          },
+        },
+        { new: true }
+      );
+
+      if (!updatedBook) {
+        console.warn(`Book with ID ${bookId} could not be updated. Possible stock issue.`);
+        return null;
+      }
+
+      console.log(`Updated quantity of book ${bookId}: ${updatedBook.quantity}`);
+
+      return { originalQuantity, newQuantity: updatedBook.quantity }; // Return the original and new quantities
+    });
+
+    // Await all book updates and collect quantity changes
+    const quantities = await Promise.all(updatePromises);
+
+    // Filter out any null values (where updates failed)
+    const validQuantities = quantities.filter((quantity) => quantity !== null);
+
+    console.log("Book quantities adjusted successfully:", validQuantities);
+
+    return validQuantities;
+  } catch (error) {
+    console.error("Error occurred while updating book quantities:", error);
+    throw error;
+  }
 };
+
 const findCartByBookId = async (req, res) => {
   try {
     const { userId, bookId } = req.body;
@@ -215,7 +318,6 @@ const findCartByBookId = async (req, res) => {
     if (!cartItem) {
       return res.status(404).json({ message: 'Book not found in the cart.' });
     }
-
     return res.status(200).json(cartItem);
   } catch (error) {
     console.error('Error:', error);
@@ -223,80 +325,108 @@ const findCartByBookId = async (req, res) => {
   }
 };
 
-// const cartbookdelete = async ( req, res) => {
-// try {
-//   // Use findByIdAndUpdate with $pull to remove the item from the cart
-//    const { userId,bookIdsToDelete}=req.body
-//    console.log(bookIdsToDelete)
-//   const updatedUser = await User.findByIdAndUpdate(
-//     userId,
-//     {
-//       $pull: { cart: { id: { $in: bookIdsToDelete} } },
-//     },
-//     { new: true } // To get the updated user document
-//   );
-//   res.json({ message: 'Books removed from cart ', data:bookIdsToDelete})
-//   if (!updatedUser) {
-//     throw new Error("User not found");
-//   }
-//   return updatedUser;
-// } catch (error) {
-//   console.error(error);
-//   throw error; // Rethrow the error for handling in the calling function
-// }
-// };
-const pushbook = async (bookfind) => {
-  const userId = '0'; // Assuming a default user ID
 
-  // Wrap the asynchronous operation in a promise
-  return new Promise((resolve, reject) => {
-    // Find the user by their ID and retrieve the 'cart' field
-    User.findOne({ _id: userId }, 'cart', (err, user) => {
-      if (err) {
-        console.error('Error:', err);
-        reject(err);
-        return;
-      }
-
-      if (!user) {
-        console.log('User not found');
-        reject('User not found');
-        return;
-      }
-
-      // Filter the items in the 'cart' based on the provided book IDs
-      const booksInCart = user.cart.filter((book) => bookfind.includes(book.id));
-
-      resolve(booksInCart);
-    });
-  });
+const pushbook = async (bookIdsToDelete) => {
+  try {
+    const books = await Book.find({ _id: { $in: bookIdsToDelete } });
+    return books.map(book => ({
+      id: book._id,
+      image: book.image,
+      price: book.price,
+      dprice: book.dprice,
+      quantity: book.quantity,
+      title: book.title,
+      timestamp: new Date(), // Or you can use Date.now() if you prefer
+    }));
+  } catch (error) {
+    console.error("Error in pushbook:", error);
+    throw error;
+  }
 };
 
+const updateReturnBook = async (books) => {
+  try {
+    const updateReturnPromises = books.map(async (item) => {
+      const bookId = item.id; // Assuming `id` is used as the book's unique identifier
+      const quantityToAdd = item.aquantity; // Quantity to add back
+      console.log(`Updating book ${bookId}, adding quantity: ${quantityToAdd}`);
+
+      // Find the book first to get its original quantity
+      const book = await Book.findById(bookId);
+
+      if (!book) {
+        console.warn(`Book with ID ${bookId} not found.`);
+        return null;
+      }
+
+      const originalQuantity = book.quantity; // Get the original quantity
+      console.log(`Original quantity of book ${bookId}: ${originalQuantity}`);
+
+      // Update the book's quantity
+      const updatedReturnBook = await Book.findOneAndUpdate(
+        { _id: bookId },
+        {
+          $set: {
+            quantity: originalQuantity + quantityToAdd, // Add back the quantity
+          },
+        },
+        { new: true }
+      );
+
+      if (!updatedReturnBook) {
+        console.warn(`Book with ID ${bookId} could not be updated.`);
+        return null;
+      }
+
+      console.log(`Updated quantity of returned book ${bookId}: ${updatedReturnBook.quantity}`);
+
+      return { originalQuantity, newQuantity: updatedReturnBook.quantity }; // Return the original and new quantities
+    });
+
+    // Await all book updates and collect quantity changes
+    const quantities = await Promise.all(updateReturnPromises);
+
+    // Filter out any null values (where updates failed)
+    const validQuantities = quantities.filter((quantity) => quantity !== null);
+
+    console.log("Book quantities adjusted successfully on return:", validQuantities);
+
+    return validQuantities;
+  } catch (error) {
+    console.error("Error occurred while updating book quantities on return:", error);
+    throw error;
+  }
+};
 const cartbookdelete = async (req, res) => {
   try {
-    const { userId, bookIdsToDelete } = req.body;
+    const { userId, bookIdsToDelete ,books} = req.body;
+   
+    console.log(req.body.books);
+    console.log("Jitendra")
 
     // Call the asynchronous pushbook function
     const bookIdsToPush = await pushbook(bookIdsToDelete);
 
-    // Use findOneAndUpdate to ensure atomic operations
-    const user = await User.findOneAndUpdate(
-      { _id: userId },
+    // Use findByIdAndUpdate to ensure atomic operations and updated syntax
+    const user = await User.findByIdAndUpdate(
+      userId,
       {
         $push: { return: { $each: bookIdsToPush } },
         $pull: { cart: { id: { $in: bookIdsToDelete } } },
       },
-      { new: true }
+      { new: true, useFindAndModify: false }
     );
 
     if (!user) {
-      throw new Error("User not found");
+      return res.status(404).json({ error: 'User not found' });
     }
+     
+    await updateReturnBook(books);
 
     res.json({ message: 'Books removed from cart and added to the return collection', data: bookIdsToDelete });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error from cartbookdelete' });
   }
 };
 
@@ -312,8 +442,9 @@ module.exports = {
   getdata,
   cartbookdelete,
   addbook,
+  getbookid,
   getbook,
   findCartByBookId,
-  getbookid,
+  getBookById,
   addcart,
 };

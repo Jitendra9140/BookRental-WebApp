@@ -74,6 +74,6 @@ const userShema=mongoose.Schema({
     ]
     }
 )
-autoincrement.initialize(connection)
-userShema.plugin(autoincrement.plugin,"user")
+// autoincrement.initialize(connection)
+// userShema.plugin(autoincrement.plugin,"user")
 module.exports =mongoose.model("user",userShema);

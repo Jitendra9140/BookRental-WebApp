@@ -7,10 +7,9 @@
 
 .Header{
 	margin: auto;
-	width: 90%;
 	height: 15%;
 	display: flex;
-	justify-content: space-between;
+	justify-content: space-around;
 	align-items: center;
 }
 
@@ -22,7 +21,7 @@
 
 .Action{
 	font-size: 14px;
-	font-family: Georgia;
+	font-family: sans-serif;
 	font-weight: 600;
 	color: red;
 	border-bottom: 1px solid red;
@@ -30,7 +29,6 @@
 
 .Cart-Items{
 	width: 100%;
-	/* height: 30%; */
   display: flex;
   justify-content: space-between;
 	align-items: center;
@@ -38,22 +36,26 @@
 .image-box{
 	width: 15%;
 	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 img{
-  height:120px
+  height:150px;
+  width:200px;
 }
 
 .title{
     padding-top: 10px;
 	font-size: 20px;
-	font-family:Georgia;
+	font-family:sans-serif;
 	font-weight: 80px;
 	/* color:black; */
 }
 .subtitle{
 	line-height: 0px;
 	font-size: 18px;
-	font-family:Georgia;
+	font-family:sans-serif;
 	font-weight: 600;
 	
 }
@@ -62,11 +64,19 @@ img{
 }
 
 .counter{
-	width: 15%;
+	width: 20%;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-  background-color:white;
+    background-color:white;
+}
+.counterm{
+	width: 15%;
+	display: flex;
+	gap:10px;
+	justify-content: space-between;
+	align-items: center;
+    background-color:white;
 }
 .btn{
 	width: 40px;
@@ -95,19 +105,19 @@ img{
 .amount{
 	padding: 20px;
 	font-size: 26px;
-	font-family: Georgia;
+	font-family: sans-serif;
 	font-weight: 800;
 	color: black;
 }
 hr{
-	width: 66%;
+	width: 100%;
 	float: right;
 	margin-right: 5%;
 }
 .checkout{
 	float: right;
 	margin-right: 5%;
-	width: 28%;
+	width: 35%;
 }
 .total{
 	width: 100%;
@@ -115,22 +125,21 @@ hr{
 	justify-content: space-between;
 }
 .Subtotal{
-	font-size: 22px;
-	font-family: 'Open Sans';
+	font-size: 21px;
+	font-family: sans-serif;
 	font-weight: 700;
 	color: #202020;
-     font-family:georgia;
 }
 .items{
 	font-size: 16px;
-	font-family: georgia;
+	font-family: sans-serif;
 	font-weight: 500;
 	color: #909090;
 	line-height: 10px;
 }
 .total-amount{
-	font-size: 36px;
-	font-family: georgia;
+	font-size: 28px;
+	font-family: sans-serif;
 	font-weight: 900;
 	color: #202020;
 }
@@ -150,4 +159,20 @@ hr{
 }
 .remove {
   font-family:georgia;
+}
+
+@media screen and (max-width: 650px) {
+	.counter{
+		display:none;
+		background-color: red;
+	}
+	.checkout{
+		width: 60%;
+	}
+}
+
+@media screen and (max-width: 450px) {
+	.checkout{
+		width: 80%;
+	}
 }

@@ -69,7 +69,7 @@ export default function Signup() {
             <div class="hidden md:block w-1/2 bg-red-600 ">
                 <img src={loginimage} className='w-full h-full object-fit:contain;' alt="" />
             </div>
-            <div class="w-full md:w-1/2 py-10 px-5 flex flex-col justify-center md:px-10">
+            <div class="w-full md:w-1/2 py-10 px-5 flex flex-col justify-center md:px-10 ">
                 <div class="text-center mb-10">
                     <h1 class="font-extrabold text-3xl text-red-900 text-4xl ">Welcome Back</h1>
                 </div>
