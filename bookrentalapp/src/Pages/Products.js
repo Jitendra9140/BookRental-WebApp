@@ -9,6 +9,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Products() {
   const navigate=useNavigate()
   useEffect(()=>{
@@ -30,17 +32,22 @@ const {id}=useParams();
       language:"",
       description:"",
       price:"",
-      dprice:"",
+      quantity:"",
       image:""
     }
  ])
+ const dummyImageUrl ='https://m.media-amazon.com/images/I/81UOudQyzPL._SY522_.jpg'; // Replace with your dummy image URL
+
+ // Function to handle image error
+ const handleImageError = (event) => {
+   event.target.src = dummyImageUrl;
+ };
 
  const lodebook= async()=>{
-        setLoading(true)
     const data = await getContent()
     setbook(data.data) 
-    setLoading(false)
  } 
+
    const handleYearChange = (event) => {
     setYear(event.target.value);
     setSemester(''); // Clear semester when year changes
@@ -58,20 +65,22 @@ const {id}=useParams();
 
 const dispatch=useDispatch();
 const addInCart=(e)=>{
-
- dispatch(addToCart(e))
- setTimeout(() => {
-  navigate("/cart/" + id);
-}, 1000);
+ if(e.quantity>0){
+    dispatch(addToCart(e))
+    setTimeout(() => {
+     navigate("/cart/" + id);
+   }, 1000);
+ }
+ else{
+  toast.error('Book is out of stock', { position: toast.POSITION.TOP_RIGHT });
+ }
 }
 //search box
-
-var [selsub,setselsub]=useState([])
 
  useEffect(() => {
   // Function to filter books
   const filterBooks = () => {
-    setLoading(true); // Set loading to true when filtering starts
+    // Set loading to true when filtering starts
 
     // Filter and set filtered books based on year, semester, and subject
     const filtered = book.filter((book) => (
@@ -79,17 +88,11 @@ var [selsub,setselsub]=useState([])
       (!semester || book.semester === semester) &&
       (!subject || book.Subject === subject)
     ));
-
-    // Simulate a delay of 1 second (1000 milliseconds)
-    setTimeout(() => {
       setFilteredBooks(filtered);
-      setLoading(false); // Set loading to false when filtering is done
-    }, 1000); // Adjust the delay time as needed
   };
 
   filterBooks(); // Call the filterBooks function
 }, [year, semester, subject, book]);
-
 
   return (
     <div className=" h-screen">  
@@ -155,24 +158,28 @@ var [selsub,setselsub]=useState([])
           <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
        </svg>):(
   filteredBooks.map((data, key) => (
-             <div class="p-6 " key={data._id}>
-             <div class="flex max-w-md bg-white  shadow-xl rounded-lg overflow-hidden">
+             <div class="relative w-[400px] h-[220px] m-3 border rounded-lg" key={data._id}>
+             <div class="flex  bg-white h-full w-full shadow-2xl rounded-lg overflow-hidden">
                <div class="w-1/3  " >
-                 <img  className='w-full h-full object-fit: contain; ' src={`${data.image}`} alt="" />
+                 <img  className='w-full h-full object-fit: contain; ' src={`${data.image}`} onError={handleImageError} alt=""  />
                </div> 
                <div class="w-2/3 p-4">
                  <h1 class="text-gray-900 font-bold text-2xl">{data.title}</h1>
                  <h3 class="text-gray-900 font-semibold text-[14px]">{data.publisher}</h3>
-                 <p class="mt-2 text-gray-600 text-sm">{data.description}</p>
+                 <p class="mt-2 text-gray-600 text-sm  truncate">{data.description}</p>
                  <div className=" text-xl  text-balck">
-                     <span className="text-black font-bold">Price: </span> ⟨₹⟩ {data.price}
-                    </div>
-                 <div class="flex item-center justify-around mt-3">
+                     <span className="text-black font-bold">
+                      {data.quantity > 0 ? <strong className='text-green-700'>Available :{data.quantity}</strong> : <strong className='text-red-700'>Out Of Stock</strong>}</span>
+                  </div>
+                 <div className=" text-xl  text-balck">
+                     <span className="text-black font-bold">Price: </span> <strong>₹{data.price}</strong> 
+                  </div>
+                 <div class=" absolute bottom-2 flex item-center justify-start gap-4 mt-3">
                    <Link>
- <a class=" p-2 bg-red-800 text-white text-xs font-bold text-decoration-none uppercase rounded" onClick={()=>{ addInCart(data)}} >Add to Cart</a>
+ <div class=" p-2 bg-red-800 text-white text-xs font-bold text-decoration-none uppercase rounded" onClick={()=>{ addInCart(data)}} >Add to Cart</div>
  </Link>
              <Link to={'/'+id+'/book/'+data._id}>
- <a class="p-2 bg-red-800 text-white text-xs font-bold text-decoration-none uppercase rounded"   >View Book</a>
+ <div class="p-2 bg-red-800 text-white text-xs font-bold text-decoration-none uppercase rounded"   >View Book</div>
  </Link>
                  </div>
                </div>
@@ -181,7 +188,7 @@ var [selsub,setselsub]=useState([])
           ))
           ) }
         </div> 
-        
+        <ToastContainer />
     </div>
   )
 }

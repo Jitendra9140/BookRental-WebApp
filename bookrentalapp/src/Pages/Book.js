@@ -1,205 +1,168 @@
-
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams ,useNavigate} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getbook } from "../Api/book";
-import { cart } from "../Api/user";
-import '../Style/book.css'
+import '../Style/book.css';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import { useDispatch } from "react-redux";
-import name from "./Datajson"
+import { addToCart } from '../Redux/Action/cartSlice'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Book() {
-  useEffect(() => {
-    getbookid();
-    // setbook(bookbyid)
-  }, []);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const { id, bid } = useParams();
-  const [book, setbook] = useState([
-    {
-      title:"",
-      author:"",
-      edition:"",
-      publisher:"",
-      pages:"",
-      language:"",
-      description:"",
-      price:"",
-      dprice:"",
-      image:""
-    }
-  ]);
+  const [book, setbook] = useState({
+    title: "",
+    author: "",
+    edition: "",
+    publisher: "",
+    pages: "",
+    language: "",
+    description: "",
+    price: "",
+    dprice: "",
+    image: ""
+  });
 
   const getbookid = async () => {
     const response = await getbook(bid);
     console.log(response.data);
     setbook(response.data);
+    const val=book.price*75/100
+    setTotal(val);
   };
-  console.log(bid)
-  const bookbyid=name.book.filter((book)=>book.id==bid)
-  console.log(book.title)
 
   const [quantity, setQuantity] = useState(1);
+  const [total,setTotal]=useState();
 
   const calcPrice = (qty) => {
-    const price = document.querySelector('.product-price').getAttribute('price-data');
-    const total = (parseFloat(price) * qty).toFixed(2);
-    document.querySelector('.product-checkout-total-amount').textContent = total;
+    const price = book.price*75/100;
+    const totalcal = (parseFloat(price) * qty).toFixed(2);
+    setTotal(totalcal)
   };
 
   const subtractQuantity = () => {
-    const value = parseInt(quantity) - 1;
+    if(quantity>1){
+    const value = quantity - 1;
     const newValue = value < 0 ? 0 : value;
     setQuantity(newValue);
     calcPrice(newValue);
+    }
   };
 
   const addQuantity = () => {
-    const value = parseInt(quantity) + 1;
-    setQuantity(value);
-    calcPrice(value);
+    if((book.quantity-quantity)>0){
+      const value = quantity + 1;
+      console.log(book.quantity);
+      setQuantity(value);
+      calcPrice(value);
+    }
+    else{
+      toast.error('Only Available this much quantity', { position: toast.POSITION.TOP_RIGHT });
+    }
   };
 
-  const handleBlur = (e) => {
-    const value = parseInt(e.target.value);
-    setQuantity(value);
-    calcPrice(value);
-  };
-//  console.log(book[0])
-  // const addToCart = async()=>{
-  //         try {
-  //           const amount =book.price*quantity;
-  //         console.log(amount)
-  //         cart(book, id);
-  //         const {data:{key}}=await axios.get(`http://localhost:8000/pay/getkey`)
-  //         const{ data :{order}}= await axios.post(`http://localhost:8000/checkout`,{amount:amount});
-  //         const options = {
-  //           key, // Enter the Key ID generated from the Dashboard
-  //           amount: order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-  //           currency: "INR",
-  //           name: "Jitendra Yadav",
-  //           description: "Test Transaction",
-  //           image: "https://example.com/your_logo",
-  //           order_id:order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-  //           callback_url: "http://localhost:8000/payvarify",
-  //           prefill: {
-  //               name: "Gaurav Kumar",
-  //               email: "gaurav.kumar@example.com",
-  //               contact: "9000090000"
-  //           },
-  //           notes: {
-  //               address: "Razorpay Corporate Office"
-  //           },
-  //           theme: {
-  //               color: "#3399cc"
-  //           }
-  
-  
-  //       };
-  //         const razor = new window.Razorpay(options);
-  //          razor.open();
-           
-  //       } catch (error) {
-  //         console.log("jitendra"+error)
-  //       }
-  // }
-  const addToCart=(e)=>{
+  const addInCart=(e)=>{
     dispatch(addToCart(e))
     setTimeout(() => {
      navigate("/cart/" + id);
    }, 1000);
   }
-  const dispatch=useDispatch();
+const dummyImageUrl ='https://m.media-amazon.com/images/I/81UOudQyzPL._SY522_.jpg';
+const handleImageError = (event) => {
+  event.target.src = dummyImageUrl;
+};
+  const dispatch = useDispatch();
+  useEffect(() => {
+    getbookid();
+  }, [bid]);
+
   return (
-    <body>
-   
-    <div class="lightbox-blanket">
-      <div class="pop-up-container">
-        <div class="pop-up-container-vertical">
-          <div class="pop-up-wrapper">
-            <div class="go-back" onclick="GoBack();"><i class="fa fa-arrow-left"></i>
+    <div className="lightbox-blanket">
+      <div className="pop-up-container">
+        <div className="pop-up-container-vertical">
+          <div className="pop-up-wrapper">
+            <div className="go-back cursor-pointer" onClick={() => navigate(-1)}><i className="fa fa-arrow-left"></i>
             </div>
-            <div class="product-details">
-              <div class="product-left">
-                <div class="product-info">
-                  <div class="product-manufacturer">
+            <div className="product-details">
+              <div className="product-left">
+                <div className="product-info">
+                  <div className="product-manufacturer">
                     {book.title}
                   </div>
-                  <div class="product-title">
-                   {book.author}
+                  <div className="product-title">
+                    {book.author}
                   </div>
                 </div>
-                <div class="product-image">
-                  <img src={`${book.image}`} />
+                <div className="product-image">
+                  <img src={`${book.image}`} alt={book.title} onError={handleImageError} />
                 </div>
               </div>
-              <div class="product-right">
-                <div class="product-description">
+              <div className="product-right">
+                <div className="product-description">
                   {book.description}
                 </div>
-                <div class="product-available">
-                 Publication :<span class="product-extended">{book.publisher}</span>
+                <div className="product-available">
+                  Publication: <span className="product-extended">{book.publisher}</span>
                 </div>
-                <div class="product-available">
-                 pages: <span class="product-extended">{book.pages}</span>
+                <div className="product-available">
+                  Pages: <span className="product-extended">{book.pages}</span>
                 </div>
-                <div class="product-available">
-                 language: <span class="product-extended">{book.language}</span>
+                <div className="product-available">
+                  Language: <span className="product-extended">{book.language}</span>
                 </div>
-                <div class="product-available">
-                 Year: <span class="product-extended">{book.year}</span>
+                <div className="product-available">
+                  Year: <span className="product-extended">{book.year}</span>
                 </div>
-                <div class="product-available">
-                 Semester:<span class="product-extended">{book.semester}</span>
+                <div className="product-available">
+                  Semester: <span className="product-extended">{book.semester}</span>
                 </div>
-                <div class="product-available">
-                 Original price:<span class="product-extended">⟨₹⟩{book.price}</span>
+                <div className="product-available">
+                  Original price: <span className="product-extended">₹{book.price}</span>
                 </div>
-                <div class="product-available">
-                 Discounted price:<span class="product-extended">⟨₹⟩{Math.floor(book.price*75/100)}</span>
+                <div className="product-available">
+                  Discounted price: <span className="product-extended">₹{Math.floor(book.price * 75 / 100)}</span>
                 </div>
-                <div class="product-available">
-                 After Return price:<span class="product-extended">⟨₹⟩{Math.floor(book.price*50/100)}</span>
+                <div className="product-available">
+                  After Return price: <span className="product-extended">₹{Math.floor(book.price * 50 / 100)}</span>
                 </div>
-                
-                <div class="product-quantity">
-                  <label for="product-quantity-input" class="product-quantity-label">Quantity</label>
-                  <div class="product-quantity-subtract" onClick={ subtractQuantity}>
-                   <ArrowLeftIcon/>
+                <div className="product-available">
+                <span className="text-black font-bold">
+                {book.quantity > 0 ? <strong className='text-green-700'>Available</strong> : <strong className='text-red-700'>Out Of Stock</strong>}</span>
+                </div>
+                <div className="product-quantity">
+                  { book.quantity>1?(
+                    <>
+                    <label htmlFor="product-quantity-input" className="product-quantity-label">Quantity</label>
+                    <div className="product-quantity-subtract btn" onClick={subtractQuantity} >
+                    <ArrowLeftIcon />
                   </div>
-                  <div>
-                    <input id="product-quantity-input"  placeholder="1" 
-                     type="text"    min="1"          value={quantity}       onChange={(e) => setQuantity(parseInt(e.target.value))}                                     onBlur={handleBlur}
-                    />
+                  <div className="bg-white  h-20px border flex items-center text-center ">{book.quantity>1?quantity:0}</div>
+                  <div className="product-quantity-add btn" onClick={addQuantity} >
+                    <ArrowRightIcon />
                   </div>
-                  <div class="product-quantity-add" onClick={addQuantity}>
-                    <ArrowRightIcon/>
-                  </div>
+                  </>):(<div></div>)} 
                 </div>
               </div>
-              <div class="product-bottom">
-                <div class="product-checkout">
+              <div className="product-bottom">
+                <div className="product-checkout">
                   Total Price
-                  <div class="product-checkout-total">
-                    <i class="fa fa-usd"></i>
-                    <div class="product-checkout-total-amount px-6">
-                      {book.price}
+                  <div className="product-checkout-total">
+                    <i className="fa fa-usd"></i>
+                    <div className="product-checkout-total-amount px-6">
+                      {total<=0?Math.floor(book.price*75/100):Math.floor(total)}₹
                     </div>
                   </div>
                 </div>
-                <div class="product-checkout-actions">
-                  <button class="add-to-cart" href=""
-                   onClick={addToCart}
-                   >Add to Cart</button>
+                <div className="product-checkout-actions">
+                  <button className="add-to-cart" onClick={()=>{ addInCart(book)}}>Add to Cart</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
-  </body>
-
-);
+  );
 }

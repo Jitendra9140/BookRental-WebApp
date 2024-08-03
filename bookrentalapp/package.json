@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "homepage": "http://Jitendra9140.github.io/BookRental-WebApp", 
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.16",
@@ -19,8 +18,8 @@
     "gh-pages": "^6.0.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-elastic-carousel": "^0.11.5",
     "react-google-login": "^5.2.2",
     "react-redux": "^8.1.2",

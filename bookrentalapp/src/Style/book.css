@@ -39,15 +39,6 @@ a:hover {
   text-decoration: underline;
 }
 
-input {}
-
-input:focus {}
-
-input[type="submit"],
-input[type="button"] {}
-
-
-
 
 
 .itemlist{ 
@@ -73,7 +64,7 @@ box-sizing: content-box;}
 
 
 .lightbox-blanket {
-  background-color: rgba(30, 30, 30, 0.9);
+  background-color: whitesmoke;
   display: block;
   height: 100vh;
   position: fixed;
@@ -135,7 +126,8 @@ box-sizing: content-box;}
   font-size:20px;
   position: relative;
   top: -52px;
-  left: 10px;
+  left: 25px;
+  color: black;
 }
 
 .product-details {

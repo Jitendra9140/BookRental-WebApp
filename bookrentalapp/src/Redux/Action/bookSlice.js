@@ -9,32 +9,43 @@ const bookcartInitialState = {
     initialState: bookcartInitialState, // Use a different initial state here
     reducers: {
         addToBookCart: (state, action) => {
-            const { _id, title, price, image,id } = action.payload;
-            
+            const { _id, title, price, image,id,quantity } = action.payload;
             // Check if the book already exists in the bookcart
             const existingBook = state.books.find((book) => book._id === _id);
-          
             if (!existingBook) {
-              // If the book is not in the bookcart, add it
-              state.books.push({
-                id,
-                _id,
-                title,
-                price,
-                image,
-              });
+              // action.payload.quantity-=1;
+               action.payload.aquantity=1;
+              state.books.push(action.payload);
+            }
+            else {
+             console.log('book is already existing');
             }
           },
       removeFromBookCart: (state, action) => {
-        // Add logic to handle removing books from the book cart
-        // You can follow a similar pattern as removeFromCart in cartSlice
+        // Find the index of the item to remove by its _id
+        const { _id, title, price, image,id,quantity } = action.payload;
+        // Check if the book already exists in the bookcart
+        const existingBook = state.books.find((book) => book._id === _id);
+        if (existingBook!== -1) {
+
+          state.books.splice(existingBook, 1);
+        }
+        else {
+          console.log('Book does not exist in the cart');
+        }
       },
       updateBookCartItem: (state, action) => {
-        // Add logic to handle updating book cart items
         // You can follow a similar pattern as updateCartItem in cartSlice
+        const existingItem = state.books.find((item) => item._id === action.payload._id);
+        if (existingItem) {
+          existingItem.aquantity = action.payload.aquantity;
+        }
+      },
+      clearBookCart: (state) => {
+        state.books = []; // Clear all books from the cart
       },
     },
   });
   
-  export const { addToBookCart, removeFromBookCart, updateBookCartItem } = bookcartSlice.actions;
+  export const { addToBookCart, removeFromBookCart, updateBookCartItem ,clearBookCart} = bookcartSlice.actions;
   export default bookcartSlice.reducer;

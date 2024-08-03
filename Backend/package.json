@@ -14,7 +14,8 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.1",
-    "mongoose": "^4.1.12",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.5.2",
     "mongoose-auto-increment": "^5.0.1",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.4",
@@ -24,8 +25,8 @@
     "nodemon": "^2.0.21"
   },
   "scripts": {
-   
+    "seed": "node ./Schema/data.js",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": " nodemon index.js"
   }
 }

@@ -25,7 +25,7 @@ Router.get("/varifyuser",middlewere.authenticate,user.varifyuser);
 Router.get("/books",user.getbook);
 Router.post("/returnbook",user.findCartByBookId);
 Router.post("/deletebook",user.cartbookdelete);
-Router.get("/:id",user.getbookid);
+Router.get("/:id",user.getBookById);
 Router.post("/checkout",pay.checkout);
 Router.post("/payvarify",pay.payvarify);
 Router.post("/addbook", upload.single('bookPic'),user.addbook);

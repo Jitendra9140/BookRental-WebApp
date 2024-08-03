@@ -9,6 +9,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Navbar from "./Navbar";
 import Footter from "./Footter";
+import BookCarousel from './HomeCarousel';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import banner from "../images/front.png"
@@ -85,6 +86,30 @@ const items = [
   { imageSrc: genres9, label: 'Sangit' },
   { imageSrc: genres10, label: 'Romance' },
 ];
+const generas = [
+  { width: 1, itemsToShow: 1 },
+  { width: 550, itemsToShow: 2, itemsToScroll: 2, pagination: false },
+  { width: 850, itemsToShow: 3 },
+  { width: 1150, itemsToShow: 4, itemsToScroll: 2 },
+  { width: 1450, itemsToShow: 5 },
+  { width: 1750, itemsToShow: 6 },
+];
+const bookbreak = [
+  { width: 1, itemsToShow: 1 },
+  { width: 450, itemsToShow: 1.5 },
+  { width: 750, itemsToShow: 2 },
+  { width: 1150, itemsToShow: 3 },
+  { width: 1450, itemsToShow: 3.5 },
+  { width: 1750, itemsToShow: 4 },
+];
+const bookbreakn = [
+  { width: 1, itemsToShow: 1 },
+  { width: 450, itemsToShow: 1.5 },
+  { width: 750, itemsToShow: 2.5 },
+  { width: 1150, itemsToShow: 3 },
+  { width: 1450, itemsToShow: 3.5 },
+  { width: 1750, itemsToShow: 4 },
+];
   return (
        <>
         <div className="sticky absolute top-0 left-0 shadow-md z-10">
@@ -93,10 +118,10 @@ const items = [
     <div>
         {/* banner section */}
       <div className="">
-        <div className="landing flex justify-center items-center flex-row  bg-gray-100  h-[60vh]  gap-1">
-          <div className="   w-100  ">
-            <div className="text-[2.9rem] text-red-600 font-serif font-bold leading-normal ">
-           India's Online<br />
+        <div className="landing flex justify-center items-center flex-row  max-[900px]:flex-col max-[900px]:h-auto  bg-gray-100  h-[60vh]  gap-1">
+          <div className="max-[400px]:p-3">
+            <div className="text-[2.9rem] text-red-600 max-[700px]:text-[2.5rem]  max-[500px]:text-[2.3rem] font-serif font-bold leading-normal ">
+           India's Online<br /> 
            Book Rental Service
             </div>
             <div className=" text-xl text-black-400  font-bold font-serif pt-4">
@@ -107,12 +132,12 @@ const items = [
               <button class="glass-button mt-7">Get Started</button>
             </div>
           </div>
-          <div className="w-3/4 flex justify-center items-cente">
+          <div className="w-1/2 flex justify-center items-cente">
             <div className=" rounded-full  flex justify-center items-cente ">
               <img
                 src={banner}
-                className=""
-                style={{ width: "400px", height: "500px" }}
+                className="h-[300px] w-[300px] max-[400px]:h-[200px] max-[400px]:w-[200px]"
+                  
                 alt=""
               />
             </div>
@@ -130,6 +155,7 @@ const items = [
      enableAutoPlay
      autoPlaySpeed={1500} // same time
      onNextEnd={handleNextEnd}
+     breakPoints={generas}
   
   transitionMs={1500}
 
@@ -144,11 +170,11 @@ const items = [
     </Carousel> 
       </div>
       {/* Advertise section */}
-      <div className="flex  h-96 w-full bg-gray-100 ">
-        <div className=" w-1/2 items-center flex flex-col mx-auto   justify-center ">
-          <div className="flex flex-col gap-3">
-            <div className="text-red-700 text-4xl font-bold font-serif ">
-              The More You Read The <br /> Less You Pay
+      <div className="bg-gray-100 ">
+        <div className="landing flex justify-center items-center flex-row  max-[900px]:flex-col max-[900px]:h-auto    gap-1  max-[700px]:mt-5">
+          <div className="  ">
+            <div className="text-red-700 text-4xl font-bold  max-[500px]:text-3xl font-serif  mt-4">
+              The More You Read  <br /> The Less You Pay
             </div>
             <div className=" ">
               Let the pages that inspire you inspire the next <br /> generation
@@ -160,9 +186,15 @@ const items = [
               </li>
             </div>
           </div>
-        </div>
-        <div className=" w-1/2 flex justify-center items-center">
-          <img src={home1} className="h-80" alt="" />
+        <div className="w-1/2 flex justify-center items-center">
+            <div className=" rounded-full  flex justify-center items-center ">
+              <img
+                src={home1}
+                className="h-[300px] w-[300px] max-[400px]:h-[200px] max-[400px]:w-[200px]"
+                alt=""
+              />
+            </div>
+          </div>
         </div>
       </div>
       <div className="flex flex-col w-full">
@@ -171,7 +203,7 @@ const items = [
           <button class=" bg-white w-[200px] border border-red-600 hover:bg-[#FC2947] hover:text-white  rounded-[20px] mt-7 text-3xl font-serif font-bold text-red-600 py-4 mr-[2px]">Author</button>
         </div>
         <div className=" flex  bg-white p-3 " >
-          <div className="" style={{width:"20%"}}>
+          <div className="max-[900px]:hidden " style={{width:"20%"}}>
             <img
               src="https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80"
               className="
@@ -179,58 +211,10 @@ const items = [
               alt=""
             />
           </div>
-          <div className="gap-2 flex-wrap flex flex-row  px-2 " style={{width:"80%"}}>
-            <Carousel
-              className="book1"
-              itemsToShow={3}
-              itemPadding={[10, 10]}
-              itemsToScroll={1}
-            >
-              {book.map((data, key) => (
-                
-                 <div className="w-[420px] h-[250px] shadow-md shadow-red-100 rounded-[10px] flex flex-row justify-center items-center gap-3 p-1  ">
-                 <div className="w-1/2 border-3 m-2 h-[200px] ">
-                   <img src={data.image} className="h-[200px] object-fill rounded-md" alt="" />
-                 </div>
-                 <div className="w-1/2 flex gap-2 flex-col ">
-                   <h1 className="text-3xl font-bold font-serif text-red-700 overflow-hidden truncate whitespace-nowrap">
-                     {data.Subject}
-                   </h1>
-                   <div className=" text-xl  text-red-400">
-                     <span className="text-black font-bold">Price: </span> ⟨₹⟩ {data.price}
-                    </div>
-                   <div>
-                     <button className="bg-white w-[80px] border border-red-600 hover:bg-[#FC2947] hover:text-white rounded-[20px] mt-7 text-xl font-serif font-bold text-red-600 py-2 mr-[2px]" onClick={()=>{ addInCart(data)}}>Rent</button>
-                   </div>
-                 </div>
-               </div> 
-              ))}
-            </Carousel>
-            <Carousel
-              className="book1"
-              itemsToShow={3}
-              itemPadding={[10, 10]}
-              itemsToScroll={1}
-            >
-              {book.map((data, key) => (
-                <div className="w-[420px] h-[250px] shadow-md shadow-red-100 rounded-[10px] flex flex-row justify-center items-center gap-3 p-1">
-                <div className="w-1/2 border-3 m-2 h-[200px]">
-                  <img src={data.image} className="h-[200px] object-cover rounded-md" alt="" />
-                </div>
-                <div className="w-1/2 flex gap-2 flex-col">
-                  <h1 className="text-3xl font-bold font-serif text-red-700 overflow-hidden truncate whitespace-nowrap">
-                    {data.Subject}
-                  </h1>
-                  <div className=" text-xl text-red-400">
-                     <span className="text-black texxt-xl font-bold">Price: </span> ⟨₹⟩ {data.price}
-                    </div>
-                  <div>
-                    <button className="bg-white w-[80px] border border-red-600 hover:bg-[#FC2947] hover:text-white rounded-[20px] mt-7 text-xl font-serif font-bold text-red-600 py-2 mr-[2px]" onClick={()=>{ addInCart(data)}}>Rent</button>
-                  </div>
-                </div>
-              </div>
-              ))}
-            </Carousel>
+          <div className="gap-2 flex-wrap flex flex-row  px-2  max-[900px]:w-full w-[80%] "  >
+          <BookCarousel books={book} breakpoints={bookbreak} addInCart={addInCart} />
+          <BookCarousel books={book} breakpoints={bookbreak} addInCart={addInCart} />
+           
            
           </div>
         </div>
@@ -238,71 +222,24 @@ const items = [
           <div className="  text-3xl font text-red-600 font-extrabold pl-20">
             New Araivals
           </div>
-          <Carousel
-              className="book1"
-              itemsToShow={3}
-              itemPadding={[10, 10]}
-              itemsToScroll={1}
-            >
-              {book.map((data, key) => (
-                 <div className="w-[420px] h-[250px] shadow-md shadow-red-100 rounded-[10px] flex flex-row justify-center items-center gap-3 p-1">
-                 <div className="w-1/2 border-3 m-2 h-[200px]">
-                   <img src={data.image} className="h-[200px] object-cover rounded-md" alt="" />
-                 </div>
-                 <div className="w-1/2 flex gap-2 flex-col">
-                   <h1 className="text-3xl font-bold font-serif text-red-700 overflow-hidden truncate whitespace-nowrap">
-                     {data.Subject}
-                   </h1>
-                   <div className=" text-xl  text-red-400">
-                     <span className="text-black  font-bold">Price: </span> ⟨₹⟩ {data.price}
-                    </div>
-                   <div>
-                     <button className="bg-white w-[80px] border border-red-600 hover:bg-[#FC2947] hover:text-white rounded-[20px] mt-7 text-xl font-serif font-bold text-red-600 py-2 mr-[2px]" onClick={()=>{ addInCart(data)}}>Rent</button>
-                   </div>
-                 </div>
-               </div>
-              ))}
-            </Carousel>
+          <BookCarousel books={book} breakpoints={bookbreakn} addInCart={addInCart} />
           
         </div>
         <div className=" flex flex-col ">
           <div className=" text-black text-3xl font text-red-600 font-extrabold pl-10 ">
             Kids Spacial
           </div>
-          <Carousel
-              className="book1"
-              itemsToShow={3}
-              itemPadding={[10, 10]}
-              itemsToScroll={1}
-            >
-              {book.map((data, key) => (
-                 <div className="w-[420px] h-[250px] shadow-md shadow-red-100 rounded-[10px] flex flex-row justify-center items-center gap-3 p-1">
-                 <div className="w-1/2 border-3 m-2 h-[200px]">
-                   <img src={data.image} className="h-[200px] object-cover rounded-md" alt="" />
-                 </div>
-                 <div className="w-1/2 flex gap-2 flex-col">
-                   <h1 className="text-3xl font-bold font-serif text-red-700 overflow-hidden truncate whitespace-nowrap">
-                     {data.Subject}
-                   </h1>
-                   <div className=" text-xl  text-red-400">
-                     <span className="text-black font-bold">Price: </span> ⟨₹⟩ {data.price}
-                    </div>
-                   <div>
-                     <button className="bg-white w-[80px] border border-red-600 hover:bg-[#FC2947] hover:text-white rounded-[20px] mt-7 text-xl font-serif font-bold text-red-600 py-2 mr-[2px]" onClick={()=>{ addInCart(data)}}>Rent</button>
-                   </div>
-                 </div>
-               </div>
-              ))}
-            </Carousel>
+          <BookCarousel books={book} breakpoints={bookbreakn} addInCart={addInCart} />
         </div>
       </div>
-        <div className="flex  h-96 w-full bg-gray-100 z-0" >
-          <div className=" w-1/2 items-center flex flex-col mx-auto   justify-center ">
-            <div className="flex flex-col gap-3">
-              <div className="text-red-700 text-4xl font-bold font-serif ">
+      <div className="bg-gray-100 ">
+        <div className="landing flex justify-center items-center flex-row  max-[900px]:flex-col max-[900px]:h-auto    gap-1  max-[700px]:mt-5">
+          <div className="  ">
+            <div className=" max-[500px]:p-3  font-serif  mt-4">
+              <div className="text-red-700 text-4xl font-bold font-serif  max-[500px]:text-3xl">
                 Spread The Joy Of <br /> Reading
               </div>
-              <div className="">
+              <div className="max-[500px]:p-3 max-[500px]:text-[12px]  ">
                 Let the pages that inspire you inspire the next <br />{" "}
                 generation of readers. Donate your favourite books <br /> to our
                 library
@@ -314,9 +251,14 @@ const items = [
               </div>
             </div>
           </div>
-          <div className=" w-1/2 flex justify-center items-center">
-            <img src={home2} className="h-80" alt="" />
-          </div>
+          <div className=" rounded-full  flex justify-center items-center ">
+              <img
+                src={home2}
+                className="h-[300px] w-[300px] max-[400px]:h-[200px] max-[400px]:w-[200px]"
+                alt=""
+              />
+            </div>
+        </div>
         </div>
       <div className="  p-5">
         <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">

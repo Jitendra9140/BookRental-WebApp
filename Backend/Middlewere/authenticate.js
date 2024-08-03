@@ -4,9 +4,9 @@ const secretKey = "jnnnfnfnfndsnfsifnfjsbs";
 const authenticate=async(req,res,next)=>{
     try {
         const token=req.headers.authorization;
-        console.log(token)
+        // console.log(token)
         const varifytoken=jwt.verify(token,secretKey)
-        console.log(varifytoken)
+        // console.log(varifytoken)
         const rootuser=await User.findOne({_id:varifytoken.id})
         // console.log(rootuser)
         if(!rootuser){
