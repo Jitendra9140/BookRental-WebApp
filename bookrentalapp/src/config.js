@@ -5,7 +5,7 @@ const config = {
     apiUrl: 'http://localhost:8000',
   },
   production: {
-    apiUrl: process.env.REACT_APP_API_URL || 'https://your-render-backend-url.onrender.com',
+    apiUrl: process.env.REACT_APP_API_URL
   }
 };
 
