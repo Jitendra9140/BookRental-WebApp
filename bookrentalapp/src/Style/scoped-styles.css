@@ -1,0 +1,241 @@
+/* Scoped CSS to prevent conflicts between different page styles */
+
+/* Global Reset for Scoped Components */
+.scoped-component * {
+  box-sizing: border-box;
+}
+
+/* Profile Page - Scoped Styles */
+.profile-page {
+  /* Add the profile-page class to the root element of Profile.js */
+  --profile-primary-color: #3498db;
+  --profile-secondary-color: #2ecc71;
+  --profile-danger-color: #e74c3c;
+  --profile-text-color: #333;
+  --profile-light-text: #555;
+  --profile-border-color: #eee;
+  --profile-bg-color: #f5f5f5;
+}
+
+.profile-page .profile-container,
+.profile-page .profile-card,
+.profile-page .profile-title,
+.profile-page .profile-details,
+.profile-page .profile-image-container,
+.profile-page .profile-image,
+.profile-page .profile-info,
+.profile-page .profile-info-group,
+.profile-page .profile-label,
+.profile-page .profile-value,
+.profile-page .profile-stats,
+.profile-page .profile-stat,
+.profile-page .profile-stat-value,
+.profile-page .profile-stat-label,
+.profile-page .profile-edit-btn,
+.profile-page .profile-form,
+.profile-page .profile-form-group,
+.profile-page .profile-input,
+.profile-page .profile-image-upload,
+.profile-page .profile-image-label,
+.profile-page .profile-image-input,
+.profile-page .profile-buttons,
+.profile-page .profile-save-btn,
+.profile-page .profile-cancel-btn {
+  /* This ensures these selectors only apply within profile-page */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Invoice Page - Scoped Styles */
+.invoice-page {
+  /* Add the invoice-page class to the root element of Invoice.js */
+  --invoice-primary-color: #f31544;
+  --invoice-secondary-color: #4CAF50;
+  --invoice-text-color: #222;
+  --invoice-light-text: #666;
+  --invoice-border-color: #ddd;
+  --invoice-bg-color: #e0e0e0;
+}
+
+.invoice-page body {
+  /* Override only within invoice-page */
+  background: var(--invoice-bg-color);
+  font-family: 'Roboto', sans-serif;
+}
+
+.invoice-page .invoice-tabs,
+.invoice-page .invoice-tab,
+.invoice-page .profile-btn,
+.invoice-page #invoiceholder,
+.invoice-page #headerimage,
+.invoice-page #invoice,
+.invoice-page [id*='invoice-'],
+.invoice-page .logo,
+.invoice-page .clientlogo,
+.invoice-page .info,
+.invoice-page .title,
+.invoice-page #project,
+.invoice-page table,
+.invoice-page td,
+.invoice-page .tabletitle,
+.invoice-page .service,
+.invoice-page .item,
+.invoice-page .itemtext,
+.invoice-page #legalcopy,
+.invoice-page .dbtn,
+.invoice-page .legal {
+  /* This ensures these selectors only apply within invoice-page */
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Book Page - Tailwind Utilities Scope */
+.book-page {
+  /* Add the book-page class to the root element of Book.js */
+  --book-primary-color: #3b82f6;
+  --book-secondary-color: #f59e0b;
+  --book-text-color: #1f2937;
+  --book-light-text: #6b7280;
+  --book-border-color: #e5e7eb;
+  --book-bg-color: #f3f4f6;
+}
+
+/* Book Card Styles */
+.book-card {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.book-card img {
+  transition: transform 0.5s ease;
+}
+
+.book-card:hover img {
+  transform: scale(1.05);
+}
+
+.book-card .line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Book Badge Styles */
+.book-badge {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: rotate(3deg) scale(1);
+  }
+  50% {
+    transform: rotate(3deg) scale(1.05);
+  }
+  100% {
+    transform: rotate(3deg) scale(1);
+  }
+}
+
+/* Star Rating Styles */
+.star-rating {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.star-rating span {
+  display: inline-block;
+}
+
+/* Book Ribbon Styles */
+.book-ribbon {
+  z-index: 5;
+  pointer-events: none;
+}
+
+.book-ribbon div {
+  position: relative;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+}
+
+/* This ensures tailwind utilities only apply within the book-page class */
+.book-page .fixed,
+.book-page .absolute,
+.book-page .relative,
+.book-page .top-0,
+.book-page .left-0,
+.book-page .top-4,
+.book-page .left-4,
+.book-page .z-10,
+.book-page .z-20,
+.book-page .w-full,
+.book-page .h-full,
+.book-page .h-64,
+.book-page .min-h-screen,
+.book-page .min-w-\[40px\],
+.book-page .overflow-hidden,
+.book-page .overflow-y-auto,
+.book-page .flex,
+.book-page .flex-col,
+.book-page .flex-row,
+.book-page .items-center,
+.book-page .justify-center,
+.book-page .justify-between,
+.book-page .gap-4,
+.book-page .gap-8,
+.book-page .grid,
+.book-page .grid-cols-2 {
+  /* These styles will only apply within elements with the book-page class */
+}
+
+/* Specific book page element styles */
+.book-page .bg-gray-100,
+.book-page .bg-white,
+.book-page .bg-gray-50,
+.book-page .bg-gray-200,
+.book-page .bg-blue-600,
+.book-page .bg-yellow-400,
+.book-page .text-gray-900,
+.book-page .text-gray-600,
+.book-page .text-gray-700,
+.book-page .text-gray-800,
+.book-page .text-blue-600,
+.book-page .text-green-600,
+.book-page .text-red-600,
+.book-page .text-orange-600,
+.book-page .rounded-lg,
+.book-page .rounded-md,
+.book-page .rounded-full,
+.book-page .shadow-xl,
+.book-page .border,
+.book-page .border-gray-200,
+.book-page .border-gray-300 {
+  /* These styles will only apply within elements with the book-page class */
+}
+
+/* Fix for body styles conflicts */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Reset body styles for specific pages */
+.profile-page body,
+.invoice-page body,
+.book-page body {
+  /* Reset to default for these pages */
+  background: initial;
+  color: initial;
+  font-family: initial;
+}

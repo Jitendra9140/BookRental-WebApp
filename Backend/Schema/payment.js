@@ -1,5 +1,4 @@
 const mongoose =require("mongoose")
-const autoincrement=require("mongoose-auto-increment")
 var connection = mongoose.createConnection("mongodb://0.0.0.0:27017/AtRent");
 const paymentSchema = mongoose.Schema({
    user: {
@@ -31,6 +30,5 @@ const paymentSchema = mongoose.Schema({
      default: Date.now, // Automatically set the timestamp to the current date and time
    },
  });
-// autoincrement.initialize(connection)
-// paymentSchema.plugin(autoincrement.plugin,"payment")
+
 module.exports =mongoose.model("payment",paymentSchema);

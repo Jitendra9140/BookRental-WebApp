@@ -1,5 +1,7 @@
 import axios from "axios";
-const url="http://localhost:8000"
+import config from "../config";
+const url = config.apiUrl;
+
 export const getContent = async()=>{
     try{
         return await axios.get(`${url}/books`)
@@ -18,11 +20,39 @@ export const getdata = async(data)=>{
 }
 export const getbook = async(data)=>{
     try{
-        console.log(data);
-        return await axios.get(`${url}/${data}`,data)
+        if (!data) {
+            console.error("Invalid book ID provided to getbook API");
+            return { data: null, error: "Invalid book ID" };
+        }
+        
+        console.log("Fetching book with ID:", data);
+        const response = await axios.get(`${url}/${data}`);
+        
+        // Check if the response has the expected structure
+        if (response && response.data) {
+            // If the response contains a success property and a book property (from backend)
+            if (response.data.success && response.data.book) {
+                return {
+                    data: response.data.book
+                };
+            }
+            // If the response is just the book data directly
+            return response;
+        } else {
+            console.error("Unexpected API response format:", response);
+            return { 
+                data: null, 
+                error: "Unexpected API response format" 
+            };
+        }
     }
     catch(err){
-          console.log("error is occur in finding data by api")
+        console.error("Error in getbook API:", err);
+        // Return a structured error response instead of undefined
+        return { 
+            data: null, 
+            error: err.message || "Error occurred in finding data by API" 
+        };
     }
 }
 export const addbook= async(data)=>{

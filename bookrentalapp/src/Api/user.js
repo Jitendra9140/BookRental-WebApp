@@ -1,5 +1,6 @@
 import axios from "axios";
-const url="http://localhost:8000"
+import config from "../config";
+const url = config.apiUrl;
 
 export const newuser= async(data)=>{
     const formdata=new FormData();
@@ -52,11 +53,14 @@ export const updatepass= async(data)=>{
           console.log("Error during updating password") 
     }
 }
-export const verifyUser = async (token) => {
+export const verifyUser = async (tokenObj) => {
   try {
+    // Check if token is passed as an object or string
+    const tokenValue = tokenObj.token || tokenObj;
+    
     const response = await axios.get(`${url}/varifyuser`, {
       headers: {
-        Authorization:token.token// Assuming you're using a Bearer token
+        Authorization: tokenValue
       },
     });
     return response.data; // Return the data from the response
@@ -82,12 +86,42 @@ export const findinCart= async({userId,bookid})=>{
           console.log("error is occur in finding user by api")
     }
 }
-export const deletcartbook= async({userId,bookIdsToDelete,books})=>{
+export const deletcartbook= async({userId,bookIdsToDelete,booksToUpdate,partialReturns})=>{
     try{ 
-       console.log(books)
-        return await axios.post(`${url}/deletebook`,{userId,bookIdsToDelete,books})
+        // Log the parameters being sent to the backend
+        console.log("Sending to backend:", {userId, bookIdsToDelete, booksToUpdate, partialReturns})
+       
+        // Make sure we're sending the correct parameters to match the backend controller
+        return await axios.post(`${url}/deletcartbook`,{userId, bookIdsToDelete, booksToUpdate, partialReturns})
     }
     catch(err){
-          console.log("error is occur in finding user by api")
+        console.error("Error in processing book return:", err)
+        throw err; // Rethrow to allow proper error handling in the component
+    }
+}
+
+export const updateUserProfile = async (userId, userData) => {
+    try {
+        const formData = new FormData();
+        
+        // Append profile picture if provided
+        if (userData.profilePic) {
+            formData.append("profilePic", userData.profilePic, userData.profilePic.name);
+        }
+        
+        // Append other user data
+        formData.append('fname', userData.fname);
+        formData.append('lname', userData.lname);
+        formData.append('phonenumber', userData.phonenumber);
+        formData.append('year', userData.year);
+        formData.append('userId', userId);
+        
+        console.log("Updating user profile:", userId);
+        
+        const response = await axios.post(`${url}/updateProfile`, formData);
+        return response;
+    } catch (err) {
+        console.error("Error updating user profile:", err);
+        throw err; // Rethrow to allow proper error handling in the component
     }
 }

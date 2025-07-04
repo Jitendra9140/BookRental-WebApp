@@ -1,5 +1,4 @@
 const mongoose =require("mongoose")
-const autoincrement=require("mongoose-auto-increment")
 var connection = mongoose.createConnection("mongodb://0.0.0.0:27017/AtRent");
 const bookShema=mongoose.Schema({
       title:String,
@@ -11,7 +10,7 @@ const bookShema=mongoose.Schema({
       description:String,
       price:Number,
       quantity:Number,
-      image:String
+      image:String,
+      imageId:String // Cloudinary public_id for book image
 })
-// autoincrement.initialize(connection)
 module.exports =mongoose.model("book",bookShema);

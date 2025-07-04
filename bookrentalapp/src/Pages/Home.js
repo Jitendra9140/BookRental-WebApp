@@ -7,9 +7,9 @@ import { useDispatch } from 'react-redux'
 import { addToCart } from '../Redux/Action/cartSlice'
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Navbar from "./Navbar";
-import Footter from "./Footter";
-import BookCarousel from './HomeCarousel';
+import Navbar from "../Components/common/Navbar";
+import Footer from "../Components/common/Footer";
+import BookCarousel from '../Components/common/HomeCarousel';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import banner from "../images/front.png"
@@ -213,9 +213,7 @@ const bookbreakn = [
           </div>
           <div className="gap-2 flex-wrap flex flex-row  px-2  max-[900px]:w-full w-[80%] "  >
           <BookCarousel books={book} breakpoints={bookbreak} addInCart={addInCart} />
-          <BookCarousel books={book} breakpoints={bookbreak} addInCart={addInCart} />
-           
-           
+          <BookCarousel books={book} breakpoints={bookbreak} addInCart={addInCart} /> 
           </div>
         </div>
         <div className=" flex flex-col ">
@@ -233,7 +231,7 @@ const bookbreakn = [
         </div>
       </div>
       <div className="bg-gray-100 ">
-        <div className="landing flex justify-center items-center flex-row  max-[900px]:flex-col max-[900px]:h-auto    gap-1  max-[700px]:mt-5">
+        <div className="landing flex justify-around items-center flex-row  max-[900px]:flex-col max-[900px]:h-auto    gap-1  max-[700px]:mt-5">
           <div className="  ">
             <div className=" max-[500px]:p-3  font-serif  mt-4">
               <div className="text-red-700 text-4xl font-bold font-serif  max-[500px]:text-3xl">
@@ -305,7 +303,7 @@ const bookbreakn = [
           </div>
         </div>
       </div>
-      <Footter/>
+      <Footer/>
       <ToastContainer/>
     </div>
     </>

@@ -1,5 +1,4 @@
 const mongoose =require("mongoose")
-const autoincrement=require("mongoose-auto-increment")
 var connection = mongoose.createConnection("mongodb://0.0.0.0:27017/AtRent");
 const userShema=mongoose.Schema({
     fname:String,
@@ -8,6 +7,7 @@ const userShema=mongoose.Schema({
     password:String,
     confirmpassword:String,
     profilePic:String,
+    profilePicId:String, // Cloudinary public_id for profile picture
     year:Number,
     phonenumber:Number,
     cart:[
@@ -16,6 +16,9 @@ const userShema=mongoose.Schema({
             required: true,
           },
             image:{
+                type:String,
+            },
+            imageId:{ // Cloudinary public_id for cart item image
                 type:String,
                 // required:true
             },
@@ -74,6 +77,5 @@ const userShema=mongoose.Schema({
     ]
     }
 )
-// autoincrement.initialize(connection)
-// userShema.plugin(autoincrement.plugin,"user")
-module.exports =mongoose.model("user",userShema);
+
+module.exports =mongoose.model("user",userShema); 

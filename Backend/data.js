@@ -4,7 +4,7 @@ const fs = require('fs').promises;
 const path = require('path');
 
 // MongoDB connection details
-const uri = 'mongodb://localhost:27017'; // Replace with your MongoDB connection string
+const uri = 'mongodb+srv://jitendrastudy9140:Jitendra%409140@technosavvy.jehwerb.mongodb.net'; // Replace with your MongoDB connection string
 const dbName = 'AtRent';       // Replace with your database name
 const collectionName = 'books'; // Replace with your collection name
 
