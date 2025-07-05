@@ -1,7 +1,7 @@
 [build]
   base = "bookrentalapp"
   publish = "build"
-  command = "CI=false npm install --force && npm run build"
+  command = "npm run build"
 
 [build.environment]
   NODE_VERSION = "18"
