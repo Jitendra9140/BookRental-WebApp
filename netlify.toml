@@ -1,7 +1,7 @@
 [build]
   base = "bookrentalapp"
   publish = "build"
-  command = "npm run build"
+  command = "CI='' npm run build"
 
 [build.environment]
   NODE_VERSION = "18"
@@ -11,3 +11,4 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
