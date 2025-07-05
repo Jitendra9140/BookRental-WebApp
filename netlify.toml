@@ -1,7 +1,7 @@
 [build]
   base = "bookrentalapp"
   publish = "build"
-  command = "CI=false npm install --legacy-peer-deps && npx update-browserslist-db@latest && npm run build"
+  command = "CI=false npm install --force && npm run build"
 
 [build.environment]
   NODE_VERSION = "18"
