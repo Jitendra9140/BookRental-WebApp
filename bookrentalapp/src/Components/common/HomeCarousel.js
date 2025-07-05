@@ -1,5 +1,6 @@
 import React from 'react';
-import Carousel  from 'react-elastic-carousel';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 import { Link ,useParams} from 'react-router-dom';
 const trimText = (text, maxLength) => {
   if (!text) return '';
@@ -8,19 +9,63 @@ const trimText = (text, maxLength) => {
 };
 
 const BookCarousel = ({ books, breakpoints, addInCart }) => {
-    const dummyImageUrl ='https://m.media-amazon.com/images/I/81UOudQyzPL._SY522_.jpg'; // Replace with your dummy image URL
+  // Add console logging for debugging
+  console.log('BookCarousel rendered with:', { booksLength: books?.length, breakpoints });
+  
+  const dummyImageUrl ='https://m.media-amazon.com/images/I/81UOudQyzPL._SY522_.jpg'; // Replace with your dummy image URL
   const { id } = useParams();
+  
   // Function to handle image error
   const handleImageError = (event) => {
     event.target.src = dummyImageUrl;
   };
+  
+  // Use provided breakpoints or fallback to default responsive settings
+  const responsive = breakpoints || {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 1750 },
+      items: 4
+    },
+    desktop: {
+      breakpoint: { max: 1750, min: 1150 },
+      items: 3
+    },
+    tablet: {
+      breakpoint: { max: 1150, min: 750 },
+      items: 2
+    },
+    mobile: {
+      breakpoint: { max: 750, min: 450 },
+      items: 1.5
+    },
+    smallMobile: {
+      breakpoint: { max: 450, min: 0 },
+      items: 1
+    }
+  };
+  
+  // Validate books data
+  if (!books || !Array.isArray(books) || books.length === 0) {
+    console.warn('BookCarousel received invalid or empty books data');
+    return <div className="p-4 text-center">No books available to display</div>;
+  }
+
   return (
     <Carousel
       className="book1"
-      itemsToShow={3}
-      itemPadding={[10, 10]}
-      itemsToScroll={1}
-      breakPoints={breakpoints}
+      responsive={responsive}
+      swipeable={true}
+      draggable={true}
+      showDots={false}
+      ssr={true} // means to render carousel on server-side
+      infinite={true}
+      autoPlay={false}
+      keyBoardControl={true}
+      customTransition="all .5s"
+      transitionDuration={500}
+      containerClass="carousel-container"
+      removeArrowOnDeviceType={["tablet", "mobile"]}
+      itemClass="carousel-item-padding-40-px"
     >
       {books.map((data, key) => (
         <div className="relative w-[400px] h-[250px] m-3 p-2 group" key={data.id}>
@@ -76,7 +121,7 @@ const BookCarousel = ({ books, breakpoints, addInCart }) => {
                       Add to Cart
                     </button>
                     <Link
-                      to={`/${id}/book/${data._id}`}
+                      to={id ? `/${id}/book/${data._id}` : `/book/${data._id}`}
                       className="w-24 h-9 bg-gray-800 text-white text-xs font-bold uppercase rounded-lg flex items-center justify-center"
                     >
                       View

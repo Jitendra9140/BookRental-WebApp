@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import "../Style/Home.css";
-import Carousel from "react-elastic-carousel";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 import { getContent } from "../Api/book";
 import {useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux'
@@ -29,21 +30,9 @@ export default function Home() {
   const carouselRef = useRef(null);
   const navigate=useNavigate()
   let resetTimeout= null;
-  const [book, setbook] = useState([
-    {
-      _id:"",
-      title:"",
-      author:"",
-      edition:"",
-      publisher:"",
-      pages:"",
-      language:"",
-      description:"",
-      price:"",
-      dprice:"",
-      image:""
-    },
-  ]);
+  // Initialize with empty array instead of array with empty object
+  const [book, setbook] = useState([]);
+  const [loading, setLoading] = useState(true);
   const handleNextEnd = ({ index }) => {
     clearTimeout(resetTimeout);
     resetTimeout = setTimeout(() => {
@@ -86,30 +75,87 @@ const items = [
   { imageSrc: genres9, label: 'Sangit' },
   { imageSrc: genres10, label: 'Romance' },
 ];
-const generas = [
-  { width: 1, itemsToShow: 1 },
-  { width: 550, itemsToShow: 2, itemsToScroll: 2, pagination: false },
-  { width: 850, itemsToShow: 3 },
-  { width: 1150, itemsToShow: 4, itemsToScroll: 2 },
-  { width: 1450, itemsToShow: 5 },
-  { width: 1750, itemsToShow: 6 },
-];
-const bookbreak = [
-  { width: 1, itemsToShow: 1 },
-  { width: 450, itemsToShow: 1.5 },
-  { width: 750, itemsToShow: 2 },
-  { width: 1150, itemsToShow: 3 },
-  { width: 1450, itemsToShow: 3.5 },
-  { width: 1750, itemsToShow: 4 },
-];
-const bookbreakn = [
-  { width: 1, itemsToShow: 1 },
-  { width: 450, itemsToShow: 1.5 },
-  { width: 750, itemsToShow: 2.5 },
-  { width: 1150, itemsToShow: 3 },
-  { width: 1450, itemsToShow: 3.5 },
-  { width: 1750, itemsToShow: 4 },
-];
+// Responsive breakpoints for react-multi-carousel
+const generasResponsive = {
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 1750 },
+    items: 6
+  },
+  largeDesktop: {
+    breakpoint: { max: 1750, min: 1450 },
+    items: 5
+  },
+  desktop: {
+    breakpoint: { max: 1450, min: 1150 },
+    items: 4
+  },
+  tablet: {
+    breakpoint: { max: 1150, min: 850 },
+    items: 3
+  },
+  smallTablet: {
+    breakpoint: { max: 850, min: 550 },
+    items: 2
+  },
+  mobile: {
+    breakpoint: { max: 550, min: 0 },
+    items: 1
+  }
+};
+
+const bookbreakResponsive = {
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 1750 },
+    items: 3
+  },
+  largeDesktop: {
+    breakpoint: { max: 1750, min: 1450 },
+    items: 3
+  },
+  desktop: {
+    breakpoint: { max: 1450, min: 1150 },
+    items: 2.5
+  },
+  tablet: {
+    breakpoint: { max: 1150, min: 750 },
+    items: 2
+  },
+  mobile: {
+    breakpoint: { max: 750, min: 450 },
+    items: 1.5
+  },
+  smallMobile: {
+    breakpoint: { max: 450, min: 0 },
+    items: 1
+  }
+};
+
+const bookbreaknResponsive = {
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 1750 },
+    items: 4
+  },
+  largeDesktop: {
+    breakpoint: { max: 1750, min: 1450 },
+    items: 3.5
+  },
+  desktop: {
+    breakpoint: { max: 1450, min: 1150 },
+    items: 3
+  },
+  tablet: {
+    breakpoint: { max: 1150, min: 750 },
+    items: 2.5
+  },
+  mobile: {
+    breakpoint: { max: 750, min: 450 },
+    items: 1.5
+  },
+  smallMobile: {
+    breakpoint: { max: 450, min: 0 },
+    items: 1
+  }
+};
   return (
        <>
         <div className="sticky absolute top-0 left-0 shadow-md z-10">
@@ -150,17 +196,33 @@ const bookbreakn = [
           {" "}
           Generas
         </div>
-        <Carousel className='generas w-full' 
-     ref={carouselRef}
-     enableAutoPlay
-     autoPlaySpeed={1500} // same time
-     onNextEnd={handleNextEnd}
-     breakPoints={generas}
-  
-  transitionMs={1500}
-
-     itemsToShow={7}
-   >
+        <Carousel 
+      className='generas w-full' 
+      ref={carouselRef}
+      responsive={generasResponsive}
+      swipeable={true}
+      draggable={true}
+      showDots={false}
+      infinite={true}
+      autoPlay={true}
+      autoPlaySpeed={1500}
+      keyBoardControl={true}
+      customTransition="all 1.5s"
+      transitionDuration={1500}
+      containerClass="carousel-container"
+      removeArrowOnDeviceType={["mobile"]}
+      itemClass="carousel-item-padding-40-px"
+      afterChange={(previousSlide, { currentSlide }) => {
+        if (currentSlide === 0) {
+          clearTimeout(resetTimeout);
+          resetTimeout = setTimeout(() => {
+            if (carouselRef.current) {
+              carouselRef.current.goToSlide(0);
+            }
+          }, 4000);
+        }
+      }}
+    >
     {items.map((item, index) => (
     <div className="gencontainer cart flex justify-center items-center flex-col " key={index}>
       <img src={item.imageSrc} className='w-24 ' style={{ width: "100px", height: "100px" }} alt="" />
@@ -204,6 +266,7 @@ const bookbreakn = [
         </div>
         <div className=" flex  bg-white p-3 " >
           <div className="max-[900px]:hidden " style={{width:"20%"}}>
+
             <img
               src="https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80"
               className="
@@ -211,23 +274,37 @@ const bookbreakn = [
               alt=""
             />
           </div>
-          <div className="gap-2 flex-wrap flex flex-row  px-2  max-[900px]:w-full w-[80%] "  >
-          <BookCarousel books={book} breakpoints={bookbreak} addInCart={addInCart} />
-          <BookCarousel books={book} breakpoints={bookbreak} addInCart={addInCart} /> 
+          <div className="gap-5  max-[900px]:w-full w-[80%]"  >
+            {/* Ensure book data is available before rendering */}
+            {book && book.length > 0 ? (
+              <>
+                <BookCarousel books={book} breakpoints={bookbreakResponsive}  addInCart={addInCart} />
+                <BookCarousel books={book} breakpoints={bookbreakResponsive} addInCart={addInCart} />
+              </>
+            ) : (
+              <div>Loading books...</div>
+            )}
           </div>
         </div>
         <div className=" flex flex-col ">
           <div className="  text-3xl font text-red-600 font-extrabold pl-20">
             New Araivals
           </div>
-          <BookCarousel books={book} breakpoints={bookbreakn} addInCart={addInCart} />
-          
+          {book && book.length > 0 ? (
+            <BookCarousel books={book} breakpoints={bookbreaknResponsive} addInCart={addInCart} />
+          ) : (
+            <div className="p-4">Loading new arrivals...</div>
+          )}
         </div>
         <div className=" flex flex-col ">
           <div className=" text-black text-3xl font text-red-600 font-extrabold pl-10 ">
             Kids Spacial
           </div>
-          <BookCarousel books={book} breakpoints={bookbreakn} addInCart={addInCart} />
+          {book && book.length > 0 ? (
+            <BookCarousel books={book} breakpoints={bookbreakResponsive} addInCart={addInCart} />
+          ) : (
+            <div className="p-4">Loading kids special books...</div>
+          )}
         </div>
       </div>
       <div className="bg-gray-100 ">

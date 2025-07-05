@@ -117,15 +117,21 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
-      </div>
+      <>
+        <div className="fixed top-0 left-0 w-full z-20 shadow-md">
+          <Navbar />
+        </div>
+        <div className="flex justify-center items-center h-screen bg-gray-50">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
+          <p className="ml-3 text-lg font-medium text-gray-700">Loading profile...</p>
+        </div>
+      </>
     );
   }
 
   return (
     <>
-      <div className="sticky absolute top-0 left-0 z-20 shadow-md">
+      <div className="fixed top-0 left-0 w-full z-20 shadow-md">
         <Navbar />
       </div>
       <div className="profile-page profile-container">
@@ -136,9 +142,13 @@ export default function Profile() {
             <form onSubmit={handleSubmit} className="profile-form">
               <div className="profile-image-container">
                 <img 
-                  src={user.profilePic}
+                  src={previewImage || user.profilePic || 'https://via.placeholder.com/150'}
                   alt="Profile" 
                   className="profile-image"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'https://via.placeholder.com/150';
+                  }}
                 />
                 <div className="profile-image-upload">
                   <label htmlFor="profilePic" className="profile-image-label">
@@ -236,9 +246,13 @@ export default function Profile() {
             <div className="profile-details">
               <div className="profile-image-container">
                 <img 
-                  src={user.profilePic}
+                  src={user.profilePic || 'https://via.placeholder.com/150'}
                   alt="Profile" 
                   className="profile-image"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'https://via.placeholder.com/150';
+                  }}
                 />
               </div>
               

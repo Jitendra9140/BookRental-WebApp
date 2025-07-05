@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useContext } from "react";
-import { DataContext } from "./Resetconteexr";
+import DataContextProvider ,{DataContext} from '../../contexts/ResetContext';
 import { Button, TextField, OutlinedInput ,FormControl,InputLabel,IconButton,InputAdornment} from "@mui/material";
 import { Visibility,VisibilityOff}from "@mui/icons-material";
 import { Link ,useNavigate} from "react-router-dom";
