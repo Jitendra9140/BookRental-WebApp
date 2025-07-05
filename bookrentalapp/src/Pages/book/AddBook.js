@@ -1,6 +1,7 @@
-import React,{useState} from 'react'
+import React,{useState, useContext} from 'react'
 import { useNavigate } from 'react-router-dom';
 import { addbook } from '../../Api/book';
+import { UserContext } from '../../contexts/UserContext';
 
 export default function AddBook() {
     const [book,setbook]=useState({
@@ -12,7 +13,8 @@ export default function AddBook() {
       }) 
     
       const navigate=useNavigate()
-      const id=window.localStorage.getItem("Id")
+      const { user } = useContext(UserContext);
+      const id = user ? user._id : window.localStorage.getItem("Id")
       
       const handleSubmit = async (event) => {
         try {

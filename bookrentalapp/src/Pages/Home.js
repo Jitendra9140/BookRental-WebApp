@@ -1,4 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
+import { UserContext } from "../contexts/UserContext";
 import "../Style/Home.css";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -53,7 +54,8 @@ export default function Home() {
     AOS.init();
   }, []);
   const dispatch=useDispatch();
-  const id=window.localStorage.getItem("Id")
+  const { user } = useContext(UserContext);
+  const id = user ? user._id : window.localStorage.getItem("Id")
 const addInCart=(e)=>{
  dispatch(addToCart(e))
  toast.success("Successfully add to cart" );

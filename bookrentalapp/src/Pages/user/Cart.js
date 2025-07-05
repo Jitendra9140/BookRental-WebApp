@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
-import { findUserByID, cart } from '../../Api/user';
+import { cart } from '../../Api/user';
 import { getbook} from '../../Api/book';
 import { createPurchaseInvoice } from '../../Api/invoice';
 import '../../Style/cart.css';
@@ -13,17 +13,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate,Link} from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
+import { UserContext } from '../../contexts/UserContext';
 export default function Cart() {
 const { id } = useParams();
 const [price, setPrice] = useState();
-const navigate=useNavigate()
-const [user, setUser] = useState({
-  fname: '',
-  lname: '',
-  email: '',
-  password: '',
-  profilePic: '',
-});
+const navigate = useNavigate();
+const { user } = useContext(UserContext);
 
 const [purbook, setPurbook] = useState([
   {
@@ -35,27 +30,6 @@ const [purbook, setPurbook] = useState([
     image: '',
   },
 ]);
-
-const getuser = async () => {
-  try {
-    if (!id || id === 'null' || id === 'undefined') {
-      console.error("Invalid user ID provided to getuser");
-      throw new Error("Invalid user ID");
-    }
-    
-    const response = await findUserByID(id);
-    
-    if (!response || !response.data) {
-      console.error("Invalid response from findUserByID API", response);
-      throw new Error("Failed to fetch user data");
-    }
-    
-    setUser(response.data.user || response.data);
-  } catch (error) {
-    console.error("Error in getuser function:", error);
-    throw error; // Re-throw to be handled by the caller
-  }
-};
 
 const { carts } = useSelector((state) => state.cart);
 const [quantity, setQuantity] = useState(1);
@@ -176,9 +150,10 @@ const checkout = async () => {
   try {
     console.log("Processing checkout");
     const amount = price;
+    const userId = user ? user._id : id;
     const requestData = {
       amount: amount,
-      userId: id,
+      userId: userId,
       userName: user.fname,
       userEmail: user.email,
       userPhone: user.phone || '',
@@ -215,13 +190,13 @@ const checkout = async () => {
       handler: function (response) {
       // Payment successful, now call cart function
       console.log("Payment Successful", response);
-      cart(purbook, id);
+      cart(purbook, userId);
       
       // Create purchase invoice
       try {
         // Create invoice data
         const invoiceData = {
-          userId: id,
+          userId: userId,
           items: purbook.map(item => ({
             bookId: item.id,
             title: item.title,
@@ -286,8 +261,8 @@ const handleImageError = (event) => {
 };
 
 useEffect(() => {
-  // Check if ID is valid before proceeding
-  if (!id || id === 'null' || id === 'undefined') {
+  // Check if user is logged in
+  if (!user || !user._id) {
     toast.error("Please login to view your cart");
     navigate("/"); // Redirect to login page
     return;
@@ -296,19 +271,7 @@ useEffect(() => {
   // Proceed with existing code
   calcPrice();
   checkPurchase();
-  
-  // Fetch user data with error handling
-  const fetchUserData = async () => {
-    try {
-      await getuser();
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      toast.error("Error loading user information");
-    }
-  };
-  
-  fetchUserData();
-}, [carts, id, navigate]);
+}, [carts, user, navigate]);
 
   return (
 <div>

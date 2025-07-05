@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Navbar from '../../Components/common/Navbar';
 import { Button, TextField } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -7,13 +7,17 @@ import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import SendIcon from '@mui/icons-material/Send';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import InfoIcon from '@mui/icons-material/Info';
-import { findinCart, deletcartbook, findUserByID } from '../../Api/user';
+import { findinCart, deletcartbook } from '../../Api/user';
 import { addToBookCart, removeFromBookCart, updateBookCartItem, clearBookCart } from '../../Redux/Action/bookSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../../Style/return.css';
+import dummyImageUrl from '../../images/dummy.png';
+import { UserContext } from '../../contexts/UserContext';
+
+
 
 export default function Return() {
   const navigate = useNavigate();
@@ -24,7 +28,8 @@ export default function Return() {
 
   const { books } = useSelector((state) => state.bookcart);
   const dispatch = useDispatch();
-  const userId = window.localStorage.getItem('Id');
+  const { user, refreshUserData } = useContext(UserContext);
+  const userId = user ? user._id : window.localStorage.getItem('Id');
 
   const handlechange = (e) => setbookid(e.target.value);
 
@@ -61,8 +66,8 @@ export default function Return() {
 
     try {
       setLoading(true);
-      const userRes = await findUserByID(userId);
-      const userCart = userRes?.data?.user?.cart || [];
+      // Use user data from context instead of making a separate API call
+      const userCart = user?.cart || [];
 
       const bookIdsToDelete = [];
       const booksToUpdate = [];
@@ -114,7 +119,7 @@ export default function Return() {
       dispatch(clearBookCart());
       
       // Refresh the user's cart data to show updated state
-      await refreshUserCart();
+      await refreshUserData();
       
       toast.success("Books returned successfully. Redirecting to invoice...");
       
@@ -187,10 +192,9 @@ export default function Return() {
     if (window.confirm("Remove all books from return list?")) dispatch(clearBookCart());
   };
 
-  const showRemainingBooks = async () => {
+  const showRemainingBooks = () => {
     try {
-      const userRes = await findUserByID(userId);
-      const cart = userRes?.data?.user?.cart || [];
+      const cart = user?.cart || [];
       if (!cart.length) return toast.info("No books in your purchase history");
 
       const msg = cart.map(b => `${b.title} (ID: ${b.id}) - Qty: ${b.quantity}`).join('\n');
@@ -200,29 +204,16 @@ export default function Return() {
     }
   };
 
-  const dummyImageUrl = 'https://m.media-amazon.com/images/I/81UOudQyzPL._SY522_.jpg';
+  
   const handleImageError = (e) => (e.target.src = dummyImageUrl);
 
   useEffect(() => calcPrice(), [books]);
 
-  // Function to refresh user cart data
-  const refreshUserCart = async () => {
-    if (!userId) return;
-    
-    try {
-      const res = await findUserByID(userId);
-      const cart = res?.data?.user?.cart || [];
-      if (cart.length) {
-        console.log(`You have ${cart.length} purchased book(s)`);
-      }
-    } catch (e) {
-      console.error("Fetch cart error", e);
-    }
-  };
-
   useEffect(() => {
-    refreshUserCart();
-  }, [userId]);
+    if (user && user.cart) {
+      console.log(`You have ${user.cart.length} purchased book(s)`);
+    }
+  }, [user]);
   
   return (
     <div className="return-page">

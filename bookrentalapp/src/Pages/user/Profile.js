@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { findUserByID, updateUserProfile } from '../../Api/user';
+import React, { useState, useEffect, useContext } from 'react';
+import { updateUserProfile } from '../../Api/user';
 import Navbar from '../../Components/common/Navbar';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../../Style/profile.css';
 import '../../Style/scoped-styles.css';
+import { UserContext } from '../../contexts/UserContext';
 
 export default function Profile() {
-  const [user, setUser] = useState({});
+  const { user, loading: userLoading, refreshUserData } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     fname: '',
@@ -20,35 +21,21 @@ export default function Profile() {
   const [previewImage, setPreviewImage] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   
-  const id = window.localStorage.getItem("Id");
+  const id = user ? user._id : window.localStorage.getItem("Id");
   
-  const getUserDetails = async () => {
-    try {
-      setLoading(true);
-      const response = await findUserByID(id);
-      if (response && response.data && response.data.user) {
-        setUser(response.data.user);
-        console.log(user.profilePic)
-        setFormData({
-          fname: response.data.user.fname || '',
-          lname: response.data.user.lname || '',
-          email: response.data.user.email || '',
-          phonenumber: response.data.user.phonenumber || '',
-          year: response.data.user.year || '',
-          profilePic: null
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching user details:", error);
-      toast.error("Error loading user data", { position: toast.POSITION.TOP_RIGHT });
-    } finally {
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        fname: user.fname || '',
+        lname: user.lname || '',
+        email: user.email || '',
+        phonenumber: user.phonenumber || '',
+        year: user.year || '',
+        profilePic: null
+      });
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    getUserDetails();
-  }, []);
+  }, [user]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -84,8 +71,8 @@ export default function Profile() {
       
       if (response && response.data && response.data.success) {
         toast.success("Profile updated successfully", { position: toast.POSITION.TOP_RIGHT });
-        // Refresh user data
-        getUserDetails();
+        // Refresh user data from context
+        await refreshUserData();
         // Toggle back to view mode
         setIsEditing(false);
       } else {
@@ -101,7 +88,7 @@ export default function Profile() {
 
   const toggleEditMode = () => {
     setIsEditing(!isEditing);
-    if (!isEditing) {
+    if (!isEditing && user) {
       // Reset form data when entering edit mode
       setFormData({
         fname: user.fname || '',
@@ -115,7 +102,7 @@ export default function Profile() {
     }
   };
 
-  if (loading) {
+  if (loading || userLoading) {
     return (
       <>
         <div className="fixed top-0 left-0 w-full z-20 shadow-md">

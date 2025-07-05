@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import "../../Style/Products.css";
 import Navbar from '../../Components/common/Navbar';
 import { useDispatch } from 'react-redux';
@@ -11,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { getContent } from '../../Api/book';
+import { UserContext } from '../../contexts/UserContext';
 
 // Utility: Trim text safely
 const trimText = (text, maxLength) => {
@@ -23,6 +24,8 @@ export default function BookList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
+  const { user } = useContext(UserContext);
+  const userId = user ? user._id : id;
 
   const [book, setbook] = useState([]);
   const [year, setYear] = useState('');
@@ -70,7 +73,7 @@ export default function BookList() {
         dispatch(addToCart(e));
         toast.success(`"${trimText(e.title, 20)}" added to cart!`);
         setTimeout(() => {
-          navigate("/cart/" + id);
+          navigate("/cart/" + userId);
         }, 100);
       } else {
         toast.error("Sorry, this book is out of stock!");
@@ -234,7 +237,7 @@ export default function BookList() {
                       Add to Cart
                     </button>
                     <Link
-                      to={`/${id}/book/${data._id}`}
+                      to={`/${userId}/book/${data._id}`}
                       className="w-24 h-9 bg-gray-800 text-white text-xs font-bold uppercase rounded-lg flex items-center justify-center"
                     >
                       View

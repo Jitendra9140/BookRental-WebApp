@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import '../../Style/invoice.css'
 import '../../Style/scoped-styles.css'
-import { findUserByID } from '../../Api/user';
 import { getUserInvoices } from '../../Api/invoice';
 import Navbar from '../../Components/common/Navbar';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { UserContext } from '../../contexts/UserContext';
 
 // Import modular components
 import {
@@ -13,7 +13,7 @@ import {
   InvoiceDetail,  EmptyState,  LoadingState,  formatDate,  formatInvoiceDate,  captureContent,
   convertToPDF,  generateInvoicePDF} from '../../Components/Invoice';
 export default function Invoice() {
-   const [user, setUser] = useState({})
+   const { user, loading: userLoading } = useContext(UserContext);
    const [returnedBooks, setReturnedBooks] = useState([])
    const [loading, setLoading] = useState(true)
    const [activeTab, setActiveTab] = useState('current')
@@ -24,24 +24,21 @@ export default function Invoice() {
    const [returnInvoices, setReturnInvoices] = useState([])
    const [selectedInvoice, setSelectedInvoice] = useState(null)
    const [activeInvoiceType, setActiveInvoiceType] = useState(null)
-   const id = window.localStorage.getItem("Id")
+   const id = user ? user._id : window.localStorage.getItem("Id")
    
    const getdetail = async () => {
       try {
          setLoading(true);
-         const response = await findUserByID(id);
          
-         if (response && response.data && response.data.user) {
-            setUser(response.data.user);
-            
+         if (user) {
             // Process all historical returns
-            if (response.data.user.return && response.data.user.return.length > 0) {
-               setAllReturns(response.data.user.return);
+            if (user.return && user.return.length > 0) {
+               setAllReturns(user.return);
             }
             
             // Process all purchases (cart items)
-            if (response.data.user.cart && response.data.user.cart.length > 0) {
-               setAllPurchases(response.data.user.cart);
+            if (user.cart && user.cart.length > 0) {
+               setAllPurchases(user.cart);
             }
          }
          
@@ -116,8 +113,14 @@ export default function Invoice() {
    };
   
    useEffect(()=>{
-      getdetail()
-   },[])
+      if (user) {
+         getdetail();
+      }
+   },[user])
+   
+   useEffect(() => {
+      setLoading(userLoading);
+   }, [userLoading])
    
    // Handle invoice click to view details
    const handleInvoiceClick = async (invoiceId) => {

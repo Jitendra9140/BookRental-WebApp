@@ -3,11 +3,14 @@ import "../../Style/payment.css"
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../../Components/common/Navbar';
 import Footer from '../../Components/common/Footer'
+import { useContext } from 'react'
+import { UserContext } from '../../contexts/UserContext'
 
 function PaymentSuccess() {
   const navigate=useNavigate();
+  const { user } = useContext(UserContext);
   const handleclick=()=>{
-    const id=window.localStorage.getItem("Id")
+    // Use user context instead of localStorage
     navigate("/home")
   }
   return (

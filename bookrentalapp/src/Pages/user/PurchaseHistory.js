@@ -1,40 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import Navbar from '../../Components/common/Navbar';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { findUserByID } from '../../Api/user';
 import '../../Style/history.css';
 import { Tooltip } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { UserContext } from '../../contexts/UserContext';
 
 export default function PurchaseHistory() {
-    const [user, setUser] = useState({
-        fname: '',
-        lname: '',
-        email: '',
-        password: '',
-        profilePic: '',
-        cart: [] // Initialize cart as empty array
-      });
-      const [loading, setLoading] = useState(true); // Add loading state
-      const id = window.localStorage.getItem('Id');
-      console.log(id);
-      
-      const getuser = async () => {
-        try {
-          setLoading(true); // Set loading to true before fetching
-          const response = await findUserByID(id);
-          if (response && response.data) {
-            
-            setUser(response.data.user);
-          } else {
-            console.error("Invalid response from findUserByID");
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-        } finally {
-          setLoading(false); // Set loading to false after fetching
-        }
-      };
+    const { user, loading: userLoading } = useContext(UserContext);
+    const [loading, setLoading] = useState(true);
+    const id = user ? user._id : window.localStorage.getItem('Id');
+    
+    useEffect(() => {
+      if (user) {
+        setLoading(false);
+      }
+    }, [user]);
       
       const dummyImageUrl ='https://m.media-amazon.com/images/I/81UOudQyzPL._SY522_.jpg'; // Replace with your dummy image URL
 
@@ -63,9 +44,10 @@ export default function PurchaseHistory() {
       
     console.log(`User Cart: ${JSON.stringify(user.cart, null, 2)}`);
 
-    useEffect(()=>{
-     getuser();
-    },[id]);
+    useEffect(() => {
+      // Loading state is now managed by the UserContext
+      setLoading(userLoading);
+    }, [userLoading]);
     
   return (
     <div>
