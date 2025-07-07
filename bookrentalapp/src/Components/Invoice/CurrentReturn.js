@@ -4,6 +4,7 @@ import DownloadButton from './DownloadButton';
 const CurrentReturn = ({ returnedBooks, onDownload }) => {
   return (
     <div className="flex-column-container">
+      {/* Desktop header - hidden on mobile */}
       <div className="flex-header">
         <div className="col-book">Book</div>
         <div className="col-title">Title</div>
@@ -23,6 +24,7 @@ const CurrentReturn = ({ returnedBooks, onDownload }) => {
         
         return (
           <div key={index} className="flex-row">
+            {/* Book image - shown at top of card on mobile */}
             <div className="col-book">
               <img 
                 src={data.image} 
@@ -31,12 +33,14 @@ const CurrentReturn = ({ returnedBooks, onDownload }) => {
                 onError={(e) => e.target.src = 'https://m.media-amazon.com/images/I/81UOudQyzPL._SY522_.jpg'}
               />
             </div>
-            <div className="col-title">{data.title}</div>
-            <div className="col-id">{data.id}</div>
-            <div className="col-date">{returnDate}</div>
-            <div className="col-quantity">{data.aquantity || 1}</div>
-            <div className="col-price">₹{data.price}</div>
-            <div className="col-return-amount">₹{Math.floor(data.price*50/100) * (data.aquantity || 1)}</div>
+            
+            {/* Book details - shown as left-aligned rows on mobile */}
+            <div className="col-title" data-label="Title">{data.title}</div>
+            <div className="col-id" data-label="Book ID">{data.id}</div>
+            <div className="col-date" data-label="Return Date">{returnDate}</div>
+            <div className="col-quantity" data-label="Quantity">{data.aquantity || 1}</div>
+            <div className="col-price" data-label="Price">₹{data.price}</div>
+            <div className="col-return-amount" data-label="Return Amount">₹{Math.floor(data.price*50/100) * (data.aquantity || 1)}</div>
           </div>
         );
       })}

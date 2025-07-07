@@ -4,6 +4,7 @@ import DownloadButton from './DownloadButton';
 const PurchaseHistory = ({ purchaseHistory, onDownload }) => {
   return (
     <div className="flex-column-container">
+      {/* Desktop header - hidden on mobile */}
       <div className="flex-header">
         <div className="col-book">Book</div>
         <div className="col-title">Title</div>
@@ -33,6 +34,7 @@ const PurchaseHistory = ({ purchaseHistory, onDownload }) => {
         
         return (
           <div key={index} className="flex-row">
+            {/* Book image - shown at top of card on mobile */}
             <div className="col-book">
               <img 
                 src={data.image} 
@@ -41,13 +43,15 @@ const PurchaseHistory = ({ purchaseHistory, onDownload }) => {
                 onError={(e) => e.target.src = 'https://m.media-amazon.com/images/I/81UOudQyzPL._SY522_.jpg'}
               />
             </div>
-            <div className="col-title">{data.title}</div>
-            <div className="col-id">{data.id}</div>
-            <div className="col-date">{purchaseDate}</div>
-            <div className="col-valid-until">{validUntilStr}</div>
-            <div className="col-quantity">{data.quantity || 1}</div>
-            <div className="col-price">₹{data.price}</div>
-            <div className="col-sell-price">₹{Math.round(data.price*0.75)}</div>
+            
+            {/* Book details - shown as left-aligned rows on mobile */}
+            <div className="col-title" data-label="Title">{data.title}</div>
+            <div className="col-id" data-label="Book ID">{data.id}</div>
+            <div className="col-date" data-label="Purchase Date">{purchaseDate}</div>
+            <div className="col-valid-until" data-label="Valid Until">{validUntilStr}</div>
+            <div className="col-quantity" data-label="Quantity">{data.quantity || 1}</div>
+            <div className="col-price" data-label="Price">₹{data.price}</div>
+            <div className="col-sell-price" data-label="Sell Price">₹{Math.round(data.price*0.75)}</div>
           </div>
         );
       })}
@@ -61,6 +65,7 @@ const PurchaseHistory = ({ purchaseHistory, onDownload }) => {
           )}
         </div>
       </div>
+
     </div>
   );
 };

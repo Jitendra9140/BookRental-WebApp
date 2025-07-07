@@ -128,6 +128,7 @@ export default function Invoice() {
          // Find the invoice in the existing invoices array
          const invoice = invoices.find(inv => inv._id === invoiceId);
          if (invoice) {
+            console.log("Selected invoice:", invoice);
             setSelectedInvoice(invoice);
             setActiveTab('invoice-detail');
          }
