@@ -146,6 +146,7 @@ const checkPurchase = () => {
   setPurbook(purchases);
 };
 
+console.log(user,"context");
 const checkout = async () => {
   try {
     console.log("Processing checkout");
@@ -263,9 +264,13 @@ const handleImageError = (event) => {
 useEffect(() => {
   // Check if user is logged in
   if (!user || !user._id) {
-    toast.error("Please login to view your cart");
-    navigate("/"); // Redirect to login page
-    return;
+    // Try to get user from localStorage as a fallback
+    const cachedUser = localStorage.getItem('cachedUserData');
+    if (!cachedUser) {
+      toast.error("Please login to view your cart");
+      navigate("/"); // Redirect to login page
+      return;
+    }
   }
   
   // Proceed with existing code
@@ -285,7 +290,7 @@ useEffect(() => {
         <div class="h-full w-full flex items-center justify-center text-blue text-opacity-20 text-4xl font-extrabold">RentYourBook</div>
       </div>
       <div class="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden shadow-lg">
-        <img class="object-cover object-center h-32" src={user.profilePic || 'https://via.placeholder.com/150'} alt='Profile' onError={(e) => e.target.src = 'https://via.placeholder.com/150'}/>
+        <img class="object-cover object-center h-32" src={user.profilePic } alt='Profile'/>
       </div>
       <div class="text-center mt-2">
         <h2 class="font-bold text-xl text-gray-800">{user.fname}</h2>

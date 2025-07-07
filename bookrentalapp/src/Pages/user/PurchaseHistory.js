@@ -9,11 +9,20 @@ import { UserContext } from '../../contexts/UserContext';
 export default function PurchaseHistory() {
     const { user, loading: userLoading } = useContext(UserContext);
     const [loading, setLoading] = useState(true);
+    const [userData, setUserData] = useState(null);
     const id = user ? user._id : window.localStorage.getItem('Id');
     
     useEffect(() => {
       if (user) {
+        setUserData(user);
         setLoading(false);
+      } else {
+        // Try to get user from localStorage as a fallback
+        const cachedUser = localStorage.getItem('cachedUserData');
+        if (cachedUser) {
+          setUserData(JSON.parse(cachedUser));
+          setLoading(false);
+        }
       }
     }, [user]);
       
@@ -42,12 +51,15 @@ export default function PurchaseHistory() {
           });
       };
       
-    console.log(`User Cart: ${JSON.stringify(user.cart, null, 2)}`);
-
     useEffect(() => {
+      // Log user cart data if available
+      if (userData && userData.cart) {
+        console.log(`User Cart: ${JSON.stringify(userData.cart, null, 2)}`);
+      }
+      
       // Loading state is now managed by the UserContext
       setLoading(userLoading);
-    }, [userLoading]);
+    }, [userLoading, userData]);
     
   return (
     <div>
@@ -61,11 +73,11 @@ export default function PurchaseHistory() {
               <div class="h-full w-full flex items-center justify-center text-blue text-opacity-20 text-4xl font-extrabold">RentYourBook</div>
             </div>
             <div class="mx-auto w-32 h-32 relative -mt-16 border-4 border-white rounded-full overflow-hidden shadow-lg">
-              <img class="object-cover object-center h-32" src={user.profilePic} alt='User profile'/>
+              <img class="object-cover object-center h-32" src={userData ? userData.profilePic : ''} alt='User profile'/>
             </div>
             <div class="text-center mt-2">
-              <h2 class="font-bold text-xl text-gray-800">{user.fname}</h2>
-              <p class="text-gray-500 font-medium">{user.email}</p>
+              <h2 class="font-bold text-xl text-gray-800">{userData ? userData.fname : 'User'}</h2>
+              <p class="text-gray-500 font-medium">{userData ? userData.email : ''}</p>
             </div>
           </div> 
     </div>
@@ -84,8 +96,8 @@ export default function PurchaseHistory() {
         <div className="h-3 w-36 bg-gray-100 rounded"></div>
       </div>
     </div>
- ) : user.cart && user.cart.length > 0 ? (
-  user.cart.map((data, key) => {
+ ) : userData && userData.cart && userData.cart.length > 0 ? (
+  userData.cart.map((data, key) => {
     // Calculate the date one year from the current item's timestamp
     const timestamp = data.timestamp;
     const currentDateTime = new Date(timestamp);

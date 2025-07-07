@@ -61,6 +61,7 @@ export default function Profile() {
       reader.readAsDataURL(file);
     }
   };
+  console.log(user,"context")
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -129,13 +130,9 @@ export default function Profile() {
             <form onSubmit={handleSubmit} className="profile-form">
               <div className="profile-image-container">
                 <img 
-                  src={previewImage || user.profilePic || 'https://via.placeholder.com/150'}
+                  src={previewImage || user.profilePic}
                   alt="Profile" 
                   className="profile-image"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = 'https://via.placeholder.com/150';
-                  }}
                 />
                 <div className="profile-image-upload">
                   <label htmlFor="profilePic" className="profile-image-label">
@@ -233,13 +230,10 @@ export default function Profile() {
             <div className="profile-details">
               <div className="profile-image-container">
                 <img 
-                  src={user.profilePic || 'https://via.placeholder.com/150'}
+                  src={user.profilePic}
                   alt="Profile" 
                   className="profile-image"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = 'https://via.placeholder.com/150';
-                  }}
+          
                 />
               </div>
               

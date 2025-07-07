@@ -9,7 +9,7 @@ const bookcartInitialState = {
     initialState: bookcartInitialState, // Use a different initial state here
     reducers: {
         addToBookCart: (state, action) => {
-            const { _id, title, price, image,id,quantity } = action.payload;
+            const { _id } = action.payload;
             // Check if the book already exists in the bookcart
             const existingBook = state.books.find((book) => book._id === _id);
             if (!existingBook) {
@@ -23,7 +23,7 @@ const bookcartInitialState = {
           },
       removeFromBookCart: (state, action) => {
         // Find the index of the item to remove by its _id
-        const { _id, title, price, image,id,quantity } = action.payload;
+        const { _id} = action.payload;
         // Check if the book already exists in the bookcart
         const existingBook = state.books.find((book) => book._id === _id);
         if (existingBook!== -1) {

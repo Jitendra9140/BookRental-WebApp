@@ -1,7 +1,6 @@
-import React,{useEffect, useState,useContext} from 'react'
+import React,{useContext} from 'react'
 import { useNavigate } from 'react-router-dom';
-import { Button, TextField, OutlinedInput } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Button, TextField } from "@mui/material";
 import  {DataContext} from '../../contexts/ResetContext';
 import axios from 'axios';
 export default function Resetpass() {
